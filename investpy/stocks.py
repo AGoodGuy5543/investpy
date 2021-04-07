@@ -347,7 +347,7 @@ def get_stock_recent_data(stock, country, as_json=False, order='ascending', inte
         raise RuntimeError("ERR#0004: data retrieval error while scraping.")
 
 
-def get_stock_historical_data(stock, country, from_date, to_date, as_json=False, order='ascending', interval='Daily'):
+def get_stock_historical_data(stock, country, from_date='31/12/1969', to_date=(str(datetime.now().day)+"/"+str(datetime.now().month)+"/"+str(datetime.now().year)), as_json=False, order='ascending', interval='Daily'):
     """
     This function retrieves historical data from the introduced stock from Investing.com. So on, the historical data
     of the introduced stock from the specified country in the specified date range will be retrieved and returned as
@@ -1586,28 +1586,12 @@ def get_stock_financials(stock, country, finacials_type='INC', period='annual'):
         raise ConnectionError("ERR#0015: error " + str(req.status_code) + ", try again later.")
 
     root = fromstring(req.text)
-
-    data = {
-        'Date': list()
-    }
-
-    for element in root.xpath(".//tr")[0].xpath(".//th"):
-        if element.text_content() != "Period Ending:":
-            data['Date'].append(element.text_content()[:4]+"-"+element.text_content()[4:6]+"-"+element.text_content()[7:])
-
-    for element in root.xpath(".//tbody")[0].xpath(".//tr"):
-        curr_row = None
-        for row in element.xpath(".//td"):
-            if row.get('class') is not None:
-                curr_row = row.text_content()
-                data[curr_row] = list()
-            data[curr_row].append(row.text_content())
-
-    dataset = pd.DataFrame(data)
-    dataset.set_index('Date', inplace=True)
-
-    return dataset
-    """
+    for element in root.xpath(".//tr"):
+        print(element.text_content())
+    return 0
+    # data = {
+    #     'Date': list()
+    # }
     table = tables
 
     for element in table.xpath(".//thead").xpath(".//th"):
@@ -1623,7 +1607,10 @@ def get_stock_financials(stock, country, finacials_type='INC', period='annual'):
                 continue
             data[curr_row].append(float(row.text_content().strip()))
 
-    """
+    dataset = pd.DataFrame(data)
+    dataset.set_index('Date', inplace=True)
+
+    return dataset
 
 
 def search_stocks(by, value):
