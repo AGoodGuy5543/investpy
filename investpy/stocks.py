@@ -201,8 +201,8 @@ def get_stock_recent_data(stock, country, as_json=False, order='ascending', inte
         IndexError: raised if stock recent data was unavailable or not found in Investing.com.
 
     Examples:
-        >>> data = investpy.get_stock_recent_data(stock='bbva', country='spain')
-        >>> data.head()
+        # >>> data = investpy.get_stock_recent_data(stock='bbva', country='spain')
+        # >>> data.head()
                      Open   High    Low  Close    Volume Currency
         Date
         2019-08-13  4.263  4.395  4.230  4.353  27250000      EUR
@@ -232,18 +232,21 @@ def get_stock_recent_data(stock, country, as_json=False, order='ascending', inte
         raise ValueError("ERR#0003: order argument can just be ascending (asc) or descending (desc), str type.")
 
     if not interval:
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     if not isinstance(interval, str):
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     interval = interval.lower()
 
     if interval not in ['daily', 'weekly', 'monthly']:
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     resource_package = 'investpy'
-    resource_path = '/'.join((('resources', 'stocks.csv')))
+    resource_path = '/'.join(('resources', 'stocks.csv'))
     if pkg_resources.resource_exists(resource_package, resource_path):
         stocks = pd.read_csv(pkg_resources.resource_filename(resource_package, resource_path), keep_default_na=False)
     else:
@@ -299,7 +302,7 @@ def get_stock_recent_data(stock, country, as_json=False, order='ascending', inte
 
     root_ = fromstring(req.text)
     path_ = root_.xpath(".//table[@id='curr_table']/tbody/tr")
-    
+
     result = list()
 
     if path_:
@@ -312,8 +315,9 @@ def get_stock_recent_data(stock, country, as_json=False, order='ascending', inte
             for nested_ in elements_.xpath(".//td"):
                 info.append(nested_.get('data-real-value'))
 
-            stock_date = datetime.strptime(str(datetime.fromtimestamp(int(info[0]), tz=pytz.timezone('GMT')).date()), '%Y-%m-%d')
-            
+            stock_date = datetime.strptime(str(datetime.fromtimestamp(int(info[0]), tz=pytz.timezone('GMT')).date()),
+                                           '%Y-%m-%d')
+
             stock_close = float(info[1].replace(',', ''))
             stock_open = float(info[2].replace(',', ''))
             stock_high = float(info[3].replace(',', ''))
@@ -347,32 +351,29 @@ def get_stock_recent_data(stock, country, as_json=False, order='ascending', inte
         raise RuntimeError("ERR#0004: data retrieval error while scraping.")
 
 
-def get_stock_historical_data(stock, country, from_date='31/12/1969', to_date=(str(datetime.now().day)+"/"+str(datetime.now().month)+"/"+str(datetime.now().year)), as_json=False, order='ascending', interval='Daily'):
+def get_stock_historical_data(stock, country, from_date='31/12/1969', to_date=(
+        str(datetime.now().day) + "/" + str(datetime.now().month) + "/" + str(datetime.now().year)), as_json=False,
+                              order='ascending', interval='Daily'):
     """
     This function retrieves historical data from the introduced stock from Investing.com. So on, the historical data
     of the introduced stock from the specified country in the specified date range will be retrieved and returned as
-    a :obj:`pandas.DataFrame` if the parameters are valid and the request to Investing.com succeeds. Note that additionally
-    some optional parameters can be specified: as_json and order, which let the user decide if the data is going to
-    be returned as a :obj:`json` or not, and if the historical data is going to be ordered ascending or descending (where the
-    index is the date), respectively.
+    a :obj:`pandas.DataFrame` if the parameters are valid and the request to Investing.com succeeds. Note that
+    additionally some optional parameters can be specified: as_json and order, which let the user decide if the data
+    is going to be returned as a :obj:`json` or not, and if the historical data is going to be ordered ascending or
+    descending (where the index is the date), respectively.
 
-    Args:
-        stock (:obj:`str`): symbol of the stock to retrieve historical data from.
-        country (:obj:`str`): name of the country from where the stock is.
-        from_date (:obj:`str`): date formatted as `dd/mm/yyyy`, since when data is going to be retrieved.
-        to_date (:obj:`str`): date formatted as `dd/mm/yyyy`, until when data is going to be retrieved.
-        as_json (:obj:`bool`, optional):
-            to determine the format of the output data, either a :obj:`pandas.DataFrame` if False and a :obj:`json` if True.
-        order (:obj:`str`, optional): to define the order of the retrieved data which can either be ascending or descending.
-        interval (:obj:`str`, optional):
-            value to define the historical data interval to retrieve, by default `Daily`, but it can also be `Weekly` or `Monthly`.
+    Args: stock (:obj:`str`): symbol of the stock to retrieve historical data from. country (:obj:`str`): name of the
+    country from where the stock is. from_date (:obj:`str`): date formatted as `dd/mm/yyyy`, since when data is going
+    to be retrieved. to_date (:obj:`str`): date formatted as `dd/mm/yyyy`, until when data is going to be retrieved.
+    as_json (:obj:`bool`, optional): to determine the format of the output data, either a :obj:`pandas.DataFrame` if
+    False and a :obj:`json` if True. order (:obj:`str`, optional): to define the order of the retrieved data which
+    can either be ascending or descending. interval (:obj:`str`, optional): value to define the historical data
+    interval to retrieve, by default `Daily`, but it can also be `Weekly` or `Monthly`.
 
-    Returns:
-        :obj:`pandas.DataFrame` or :obj:`json`:
-            The function can return either a :obj:`pandas.DataFrame` or a :obj:`json` object, containing the retrieved
-            historical data of the specified stock from the specified country. So on, the resulting dataframe contains the
-            open, high, low, close and volume values for the selected stock on market days and the currency in which those
-            values are presented.
+    Returns: :obj:`pandas.DataFrame` or :obj:`json`: The function can return either a :obj:`pandas.DataFrame` or a
+    :obj:`json` object, containing the retrieved historical data of the specified stock from the specified country.
+    So on, the resulting dataframe contains the open, high, low, close and volume values for the selected stock on
+    market days and the currency in which those values are presented.
 
             The returned data is case we use default arguments will look like::
 
@@ -406,8 +407,9 @@ def get_stock_historical_data(stock, country, from_date='31/12/1969', to_date=(s
         IndexError: raised if stock historical data was unavailable or not found in Investing.com.
 
     Examples:
-        >>> data = investpy.get_stock_historical_data(stock='bbva', country='spain', from_date='01/01/2010', to_date='01/01/2019')
-        >>> data.head()
+        # >>> data = investpy.get_stock_historical_data(stock='bbva', country='spain', from_date='01/01/2010',
+            to_date='01/01/2019')
+        # >>> data.head()
                      Open   High    Low  Close  Volume Currency
         Date
         2010-01-04  12.73  12.96  12.73  12.96       0      EUR
@@ -437,15 +439,18 @@ def get_stock_historical_data(stock, country, from_date='31/12/1969', to_date=(s
         raise ValueError("ERR#0003: order argument can just be ascending (asc) or descending (desc), str type.")
 
     if not interval:
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     if not isinstance(interval, str):
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     interval = interval.lower()
 
     if interval not in ['daily', 'weekly', 'monthly']:
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     try:
         datetime.strptime(from_date, '%d/%m/%Y')
@@ -497,7 +502,7 @@ def get_stock_historical_data(stock, country, from_date='31/12/1969', to_date=(s
     data_flag = False
 
     resource_package = 'investpy'
-    resource_path = '/'.join((('resources', 'stocks.csv')))
+    resource_path = '/'.join(('resources', 'stocks.csv'))
     if pkg_resources.resource_exists(resource_package, resource_path):
         stocks = pd.read_csv(pkg_resources.resource_filename(resource_package, resource_path), keep_default_na=False)
     else:
@@ -575,15 +580,16 @@ def get_stock_historical_data(stock, country, from_date='31/12/1969', to_date=(s
                         raise IndexError("ERR#0007: stock information unavailable or not found.")
                 else:
                     data_flag = True
-                
+
                 info = []
-            
+
                 for nested_ in elements_.xpath(".//td"):
                     info.append(nested_.get('data-real-value'))
 
                 if data_flag is True:
-                    stock_date = datetime.strptime(str(datetime.fromtimestamp(int(info[0]), tz=pytz.timezone('GMT')).date()), '%Y-%m-%d')
-                    
+                    stock_date = datetime.strptime(
+                        str(datetime.fromtimestamp(int(info[0]), tz=pytz.timezone('GMT')).date()), '%Y-%m-%d')
+
                     stock_close = float(info[1].replace(',', ''))
                     stock_open = float(info[2].replace(',', ''))
                     stock_high = float(info[3].replace(',', ''))
@@ -603,7 +609,7 @@ def get_stock_historical_data(stock, country, from_date='31/12/1969', to_date=(s
 
                 if as_json is True:
                     json_list = [value.stock_as_json() for value in result]
-                    
+
                     final.append(json_list)
                 elif as_json is False:
                     df = pd.DataFrame.from_records([value.stock_to_dict() for value in result])
@@ -634,7 +640,7 @@ def get_stock_company_profile(stock, country='spain', language='english'):
     is a short description of what the company does and since it is written by the company, it can give
     the user an overview on what does the company do. The company profile can be retrieved either in english
     or in spanish, the only thing that changes is the source from where the data is retrieved, but the
-    resulting object will be the same. Note that this functionalliy as described in the docs is just supported
+    resulting object will be the same. Note that this functionally as described in the docs is just supported
     for spanish stocks currently, so on, if any other stock from any other country is introduced as parameter,
     the function will raise an exception.
 
@@ -642,10 +648,9 @@ def get_stock_company_profile(stock, country='spain', language='english'):
         Currently just the spanish company profile can be retrieved from spanish stocks, so if you try to
         retrieve it in spanish for any other country, this function will raise a ValueError exception.
 
-    Args:
-        stock (:obj:`str`): symbol of the stock to retrieve its company profile from.
-        country (:obj:`str`): name of the country from where the stock is.
-        language (:obj:`str`, optional): language in which the company profile is going to be retrieved, can either be english or spanish.
+    Args: stock (:obj:`str`): symbol of the stock to retrieve its company profile from. country (:obj:`str`): name of
+    the country from where the stock is. language (:obj:`str`, optional): language in which the company profile is
+    going to be retrieved, can either be english or spanish.
 
     Returns:
         :obj:`dict` - company_profile:
@@ -669,8 +674,8 @@ def get_stock_company_profile(stock, country='spain', language='english'):
         ConnectionError: raised if connection to Investing.com could not be established.
 
     Examples:
-        >>> company_profile = investpy.get_stock_company_profile(stock='bbva', country='spain', language='english')
-        >>> company_profile
+        # >>> company_profile = investpy.get_stock_company_profile(stock='bbva', country='spain', language='english')
+        # >>> company_profile
         company_profile = {
             url: 'https://www.investing.com/equities/bbva-company-profile',
             desc: 'Banco Bilbao Vizcaya Argentaria, S.A. (BBVA) is a ...'
@@ -700,7 +705,8 @@ def get_stock_company_profile(stock, country='spain', language='english'):
     language = unidecode(language.strip().lower())
 
     if language not in available_sources.keys():
-        raise ValueError("ERR#0014: the specified language is not valid, it can just be either spanish (es) or english (en).")
+        raise ValueError(
+            "ERR#0014: the specified language is not valid, it can just be either spanish (es) or english (en).")
 
     country = unidecode(country.strip().lower())
 
@@ -713,7 +719,7 @@ def get_stock_company_profile(stock, country='spain', language='english'):
     selected_source = available_sources[language]
 
     resource_package = 'investpy'
-    resource_path = '/'.join((('resources', 'stocks.csv')))
+    resource_path = '/'.join(('resources', 'stocks.csv'))
     if pkg_resources.resource_exists(resource_package, resource_path):
         stocks = pd.read_csv(pkg_resources.resource_filename(resource_package, resource_path), keep_default_na=False)
     else:
@@ -769,7 +775,7 @@ def get_stock_company_profile(stock, country='spain', language='english'):
             company_profile['desc'] = ' '.join(text.replace('\n', ' ').replace('\xa0', ' ').split())
 
         return company_profile
-        
+
     elif selected_source == 'Investing':
         tag = stocks.loc[(stocks['symbol'].str.lower() == stock).idxmax(), 'tag']
 
@@ -840,7 +846,7 @@ def get_stock_dividends(stock, country):
         raise ValueError("ERR#0025: specified country value not valid.")
 
     resource_package = 'investpy'
-    resource_path = '/'.join((('resources', 'stocks.csv')))
+    resource_path = '/'.join(('resources', 'stocks.csv'))
     if pkg_resources.resource_exists(resource_package, resource_path):
         stocks = pd.read_csv(pkg_resources.resource_filename(resource_package, resource_path), keep_default_na=False)
     else:
@@ -904,13 +910,15 @@ def get_stock_dividends(stock, country):
                 for element_ in elements_.xpath(".//td"):
                     if element_.get('class'):
                         if element_.get('class').__contains__('first'):
-                            dividend_date = datetime.strptime(str(datetime.fromtimestamp(int(element_.get('data-value'))).date()), '%Y-%m-%d')
+                            dividend_date = datetime.strptime(
+                                str(datetime.fromtimestamp(int(element_.get('data-value'))).date()), '%Y-%m-%d')
                             dividend_value = float(element_.getnext().text_content().replace(',', ''))
                         if element_.get('data-value') in type_values.keys():
                             dividend_type = type_values[element_.get('data-value')]
                             try:
                                 value = int(element_.getnext().get('data-value'))
-                                dividend_payment_date = datetime.strptime(str(datetime.fromtimestamp(value).date()), '%Y-%m-%d')
+                                dividend_payment_date = datetime.strptime(str(datetime.fromtimestamp(value).date()),
+                                                                          '%Y-%m-%d')
                             except:
                                 dividend_payment_date = None
                             next_element_ = element_.getnext()
@@ -968,13 +976,15 @@ def get_stock_dividends(stock, country):
                         for element_ in elements_.xpath(".//td"):
                             if element_.get('class'):
                                 if element_.get('class').__contains__('first'):
-                                    dividend_date = datetime.strptime(str(datetime.fromtimestamp(int(element_.get('data-value'))).date()), '%Y-%m-%d')
+                                    dividend_date = datetime.strptime(
+                                        str(datetime.fromtimestamp(int(element_.get('data-value'))).date()), '%Y-%m-%d')
                                     dividend_value = float(element_.getnext().text_content().replace(',', ''))
                                 if element_.get('data-value') in type_values.keys():
                                     dividend_type = type_values[element_.get('data-value')]
                                     try:
                                         value = int(element_.getnext().get('data-value'))
-                                        dividend_payment_date = datetime.strptime(str(datetime.fromtimestamp(value).date()), '%Y-%m-%d')
+                                        dividend_payment_date = datetime.strptime(
+                                            str(datetime.fromtimestamp(value).date()), '%Y-%m-%d')
                                     except:
                                         dividend_payment_date = None
                                     next_element_ = element_.getnext()
@@ -1059,7 +1069,7 @@ def get_stock_information(stock, country, as_json=False):
         raise ValueError("ERR#0002: as_json argument can just be True or False, bool type.")
 
     resource_package = 'investpy'
-    resource_path = '/'.join((('resources', 'stocks.csv')))
+    resource_path = '/'.join(('resources', 'stocks.csv'))
     if pkg_resources.resource_exists(resource_package, resource_path):
         stocks = pd.read_csv(pkg_resources.resource_filename(resource_package, resource_path), keep_default_na=False)
     else:
@@ -1111,7 +1121,7 @@ def get_stock_information(stock, country, as_json=False):
             element = elements_.xpath(".//span[@class='float_lang_base_1']")[0]
             title_ = element.text_content()
             if title_ == "Day's Range":
-                title_ = 'Todays Range'
+                title_ = 'Today\'s Range'
             if title_ in result.columns.tolist():
                 try:
                     result.at[0, title_] = float(element.getnext().text_content().replace(',', ''))
@@ -1198,7 +1208,7 @@ def get_stocks_overview(country, as_json=False, n_results=100):
         raise ValueError("ERR#0089: n_results argument should be an integer between 1 and 1000.")
 
     resource_package = 'investpy'
-    resource_path = '/'.join((('resources', 'stocks.csv')))
+    resource_path = '/'.join(('resources', 'stocks.csv'))
     if pkg_resources.resource_exists(resource_package, resource_path):
         stocks = pd.read_csv(pkg_resources.resource_filename(resource_package, resource_path), keep_default_na=False)
     else:
@@ -1336,8 +1346,8 @@ def get_stock_financial_summary(stock, country, summary_type='income_statement',
         RuntimeError: raised if any error occurred while running the function.
 
     Examples:
-        >>> data = investpy.get_stock_financial_summary(stock='AAPL', country='United States', summary_type='income_statement', period='annual')
-        >>> data.head()
+        # >>> data = investpy.get_stock_financial_summary(stock='AAPL', country='United States', summary_type='income_statement', period='annual')
+        # >>> data.head()
                     Total Revenue  Gross Profit  Operating Income  Net Income
         Date                                                                 
         2019-09-28         260174         98392             63930       55256
@@ -1368,7 +1378,8 @@ def get_stock_financial_summary(stock, country, summary_type='income_statement',
     summary_type = unidecode(summary_type.strip().lower())
 
     if summary_type not in cst.FINANCIAL_SUMMARY_TYPES.keys():
-        raise ValueError("ERR#0134: introduced summary_type is not valid, since available values are: " + ', '.join(cst.FINANCIAL_SUMMARY_TYPES.keys()))
+        raise ValueError("ERR#0134: introduced summary_type is not valid, since available values are: " + ', '.join(
+            cst.FINANCIAL_SUMMARY_TYPES.keys()))
 
     if period is None:
         raise ValueError("ERR#0135: period can not be None, it should be a str.")
@@ -1379,10 +1390,11 @@ def get_stock_financial_summary(stock, country, summary_type='income_statement',
     period = unidecode(period.strip().lower())
 
     if period not in cst.FINANCIAL_SUMMARY_PERIODS.keys():
-        raise ValueError("ERR#0137: introduced period is not valid, since available values are: " + ', '.join(cst.FINANCIAL_SUMMARY_PERIODS.keys()))
+        raise ValueError("ERR#0137: introduced period is not valid, since available values are: " + ', '.join(
+            cst.FINANCIAL_SUMMARY_PERIODS.keys()))
 
     resource_package = 'investpy'
-    resource_path = '/'.join((('resources', 'stocks.csv')))
+    resource_path = '/'.join(('resources', 'stocks.csv'))
     if pkg_resources.resource_exists(resource_package, resource_path):
         stocks = pd.read_csv(pkg_resources.resource_filename(resource_package, resource_path), keep_default_na=False)
     else:
@@ -1422,7 +1434,7 @@ def get_stock_financial_summary(stock, country, summary_type='income_statement',
     }
 
     url = 'https://www.investing.com/instruments/Financials/changesummaryreporttypeajax'
-    
+
     req = requests.get(url, params=params, headers=headers)
 
     if req.status_code != 200:
@@ -1457,7 +1469,7 @@ def get_stock_financial_summary(stock, country, summary_type='income_statement',
     return dataset
 
 
-def get_stock_financials(stock, country, finacials_type='INC', period='annual'):
+def get_stock_financials(stock, country, financials_type='INC', period='annual'):
     """
     This function retrieves the financial summary of the introduced stock (by symbol) from the introduced
     country, based on the summary_type value this function returns a different type of financial summary, so
@@ -1467,7 +1479,7 @@ def get_stock_financials(stock, country, finacials_type='INC', period='annual'):
     Args:
         stock (:obj:`str`): symbol of the stock to retrieve its financial summary.
         country (:obj:`str`): name of the country from where the introduced stock symbol is.
-        summary_type (:obj:`str`, optional):
+        financials_type (:obj:`str`, optional):
             type of the financial summary table to retrieve, default value is `income_statement`, but all the
             available types are: `income_statement`, `cash_flow_statement` and `balance_sheet`.
         period (:obj:`str`, optional):
@@ -1492,8 +1504,8 @@ def get_stock_financials(stock, country, finacials_type='INC', period='annual'):
         RuntimeError: raised if any error occurred while running the function.
 
     Examples:
-        >>> data = investpy.get_stock_financials(stock='AAPL', country='United States', summary_type='income_statement', period='annual')
-        >>> data.head()
+        # >>> data = investpy.get_stock_financials(stock='AAPL', country='United States', summary_type='income_statement', period='annual')
+        # >>> data.head()
                     Total Revenue  Gross Profit  Operating Income  Net Income
         Date
         2019-09-28         260174         98392             63930       55256
@@ -1516,16 +1528,16 @@ def get_stock_financials(stock, country, finacials_type='INC', period='annual'):
         raise ValueError("ERR#0025: specified country value not valid.")
     # TODO: Change the summary_type to fit with financials_type
     # if summary_type is None:
-        # raise ValueError("ERR#0132: summary_type can not be None, it should be a str.")
+    # raise ValueError("ERR#0132: summary_type can not be None, it should be a str.")
 
     # if not isinstance(summary_type, str):
-        # raise ValueError("ERR#0133: summary_type value not valid.")
+    # raise ValueError("ERR#0133: summary_type value not valid.")
 
     # summary_type = unidecode(summary_type.strip().lower())
 
     # if summary_type not in cst.FINANCIAL_SUMMARY_TYPES.keys():
-        # raise ValueError("ERR#0134: introduced summary_type is not valid, since available values are: " + ', '.join(
-            # cst.FINANCIAL_SUMMARY_TYPES.keys()))
+    # raise ValueError("ERR#0134: introduced summary_type is not valid, since available values are: " + ', '.join(
+    # cst.FINANCIAL_SUMMARY_TYPES.keys()))
 
     if period is None:
         raise ValueError("ERR#0135: period can not be None, it should be a str.")
@@ -1540,7 +1552,7 @@ def get_stock_financials(stock, country, finacials_type='INC', period='annual'):
             cst.FINANCIAL_SUMMARY_PERIODS.keys()))
 
     resource_package = 'investpy'
-    resource_path = '/'.join((('resources', 'stocks.csv')))
+    resource_path = '/'.join(('resources', 'stocks.csv'))
     if pkg_resources.resource_exists(resource_package, resource_path):
         stocks = pd.read_csv(pkg_resources.resource_filename(resource_package, resource_path), keep_default_na=False)
     else:
@@ -1574,7 +1586,7 @@ def get_stock_financials(stock, country, finacials_type='INC', period='annual'):
     params = {
         "action": "change_report_type",
         "pair_ID": id_,
-        "report_type": finacials_type,
+        "report_type": financials_type,
         "period_type": cst.FINANCIAL_SUMMARY_PERIODS[period]
     }
 
@@ -1592,25 +1604,25 @@ def get_stock_financials(stock, country, finacials_type='INC', period='annual'):
     # data = {
     #     'Date': list()
     # }
-    table = tables
+    # table = tables
 
-    for element in table.xpath(".//thead").xpath(".//th"):
-        if element.get('class') is None:
-            data['Date'].append(datetime.strptime(element.text_content().strip(), '%b %d, %Y'))
-
-    for element in table.xpath(".//tbody")[0].xpath(".//tr"):
-        curr_row = None
-        for row in element.xpath(".//td"):
-            if row.get('class') is not None:
-                curr_row = row.text_content().strip()
-                data[curr_row] = list()
-                continue
-            data[curr_row].append(float(row.text_content().strip()))
-
-    dataset = pd.DataFrame(data)
-    dataset.set_index('Date', inplace=True)
-
-    return dataset
+    # for element in table.xpath(".//thead").xpath(".//th"):
+    #     if element.get('class') is None:
+    #         data['Date'].append(datetime.strptime(element.text_content().strip(), '%b %d, %Y'))
+    #
+    # for element in table.xpath(".//tbody")[0].xpath(".//tr"):
+    #     curr_row = None
+    #     for row in element.xpath(".//td"):
+    #         if row.get('class') is not None:
+    #             curr_row = row.text_content().strip()
+    #             data[curr_row] = list()
+    #             continue
+    #         data[curr_row].append(float(row.text_content().strip()))
+    #
+    # dataset = pd.DataFrame(data)
+    # dataset.set_index('Date', inplace=True)
+    #
+    # return dataset
 
 
 def search_stocks(by, value):
@@ -1619,9 +1631,9 @@ def search_stocks(by, value):
     is going to search if there is a value that matches the introduced one for the specified field which is the
     `stocks.csv` column name to search in. Available fields to search stocks are 'name', 'full_name' and 'isin'.
 
-    Args:
-        by (:obj:`str`): name of the field to search for, which is the column name which can be: 'name', 'full_name' or 'isin'.
-        value (:obj:`str`): value of the field to search for, which is the value that is going to be searched.
+    Args: by (:obj:`str`): name of the field to search for, which is the column name which can be: 'name',
+    'full_name' or 'isin'. value (:obj:`str`): value of the field to search for, which is the value that is going to
+    be searched.
 
     Returns:
         :obj:`pandas.DataFrame` - search_result:
@@ -1651,7 +1663,7 @@ def search_stocks(by, value):
         raise ValueError('ERR#0017: the introduced value to search is mandatory and should be a str.')
 
     resource_package = 'investpy'
-    resource_path = '/'.join((('resources', 'stocks.csv')))
+    resource_path = '/'.join(('resources', 'stocks.csv'))
     if pkg_resources.resource_exists(resource_package, resource_path):
         stocks = pd.read_csv(pkg_resources.resource_filename(resource_package, resource_path), keep_default_na=False)
     else:
@@ -1670,7 +1682,7 @@ def search_stocks(by, value):
 
     stocks['matches'] = stocks[by].str.contains(value, case=False)
 
-    search_result = stocks.loc[stocks['matches'] == True].copy()
+    search_result = stocks.loc[stocks['matches'] is True].copy()
 
     if len(search_result) == 0:
         raise RuntimeError('ERR#0043: no results were found for the introduced ' + str(by) + '.')

@@ -54,29 +54,34 @@ def search_quotes(text, products=None, countries=None, n_results=None):
         raise ValueError('ERR#0074: text parameter is mandatory and it should be a valid str.')
 
     if products and not isinstance(products, list):
-        raise ValueError('ERR#0094: products filtering parameter is optional, but if specified, it must be a list of str.')
+        raise ValueError('ERR#0094: products filtering parameter is optional, but if specified, it must be a list of '
+                         'str.')
 
     if countries and not isinstance(countries, list):
-        raise ValueError('ERR#0128: countries filtering parameter is optional, but if specified, it must be a list of str.')
+        raise ValueError('ERR#0128: countries filtering parameter is optional, but if specified, it must be a list of '
+                         'str.')
 
     if n_results and not isinstance(n_results, int):
-        raise ValueError('ERR#0088: n_results parameter is optional, but if specified, it must be an integer equal or higher than 1.')
+        raise ValueError('ERR#0088: n_results parameter is optional, but if specified, it must be an integer equal or '
+                         'higher than 1.')
 
     if n_results is not None:
         if n_results < 1:
-            raise ValueError('ERR#0088: n_results parameter is optional, but if specified, it must be an integer equal or higher than 1.')
+            raise ValueError('ERR#0088: n_results parameter is optional, but if specified, it must be an integer '
+                             'equal or higher than 1.')
 
     if products:
         try:
             products = list(map(lambda product: unidecode(product.lower().strip()), products))
-        except:
+        finally:
             raise ValueError("ERR#0130: the introduced products filter must be a list of str in order to be valid.")
 
         condition = set(products).issubset(cst.PRODUCT_FILTERS.keys())
         if condition is False:
             # TODO: instead of printing the possible filters, reference the docs
-            raise ValueError('ERR#0095: products filtering parameter possible values are: \"' + ', '.join(cst.PRODUCT_FILTERS.keys()) + '\".')
-        
+            raise ValueError('ERR#0095: products filtering parameter possible values are: \"' + ', '.join(
+                cst.PRODUCT_FILTERS.keys()) + '\".')
+
         products = [cst.PRODUCT_FILTERS[product] for product in products]
     else:
         products = list(cst.PRODUCT_FILTERS.values())
@@ -84,14 +89,15 @@ def search_quotes(text, products=None, countries=None, n_results=None):
     if countries:
         try:
             countries = list(map(lambda country: unidecode(country.lower().strip()), countries))
-        except:
+        finally:
             raise ValueError("ERR#0131: the introduced countries filter must be a list of str in order to be valid.")
 
         condition = set(countries).issubset(cst.COUNTRY_FILTERS.keys())
         if condition is False:
             # TODO: instead of printing the possible filters, reference the docs
-            raise ValueError('ERR#0129: countries filtering parameter possible values are: \"' + ', '.join(cst.COUNTRY_FILTERS.keys()) + '\".')
-        
+            raise ValueError('ERR#0129: countries filtering parameter possible values are: \"' + ', '.join(
+                cst.COUNTRY_FILTERS.keys()) + '\".')
+
         countries = [cst.COUNTRY_FILTERS[country] for country in countries]
     else:
         countries = list(cst.COUNTRY_FILTERS.values())
@@ -137,7 +143,7 @@ def search_quotes(text, products=None, countries=None, n_results=None):
 
         for quote in data['quotes']:
             country, pair_type = quote['flag'], quote['pair_type']
-            
+
             if countries is not None:
                 if quote['flag'] in countries:
                     country = cst.FLAG_FILTERS[quote['flag']]
@@ -157,12 +163,13 @@ def search_quotes(text, products=None, countries=None, n_results=None):
             if n_results == 1: return search_obj
 
             if search_obj not in search_results: search_results.append(search_obj)
-        
+
         params['offset'] += 270
 
-        if len(search_results) >= n_results or len(search_results) >= total_results or params['offset'] >= total_results:
+        if len(search_results) >= n_results or len(search_results) >= total_results or\
+                params['offset'] >= total_results:
             break
-    
+
     return search_results[:n_results]
 
 
@@ -178,17 +185,22 @@ def search_events(text, importances=None, countries=None, n_results=None):
         raise ValueError('ERR#0074: text parameter is mandatory and it should be a valid str.')
 
     if importances and not isinstance(importances, list):
-        raise ValueError('ERR#0138: importances filtering parameter is optional, but if specified, it must be a list of str.')
+        raise ValueError(
+            'ERR#0138: importances filtering parameter is optional, but if specified, it must be a list of str.')
 
     if countries and not isinstance(countries, list):
-        raise ValueError('ERR#0128: countries filtering parameter is optional, but if specified, it must be a list of str.')
+        raise ValueError(
+            'ERR#0128: countries filtering parameter is optional, but if specified, it must be a list of str.')
 
     if n_results and not isinstance(n_results, int):
-        raise ValueError('ERR#0088: n_results parameter is optional, but if specified, it must be an integer equal or higher than 1.')
+        raise ValueError(
+            'ERR#0088: n_results parameter is optional, but if specified, it must be an integer equal or higher than 1.')
 
     if n_results is not None:
         if n_results < 1:
-            raise ValueError('ERR#0088: n_results parameter is optional, but if specified, it must be an integer equal or higher than 1.')
+            raise ValueError(
+                'ERR#0088: n_results parameter is optional, but if specified, it must be an integer equal or higher '
+                'than 1.')
 
     params = {
         'search_text': text,
@@ -230,11 +242,11 @@ def search_events(text, importances=None, countries=None, n_results=None):
 
         for event in events:
             country, pair_type = quote['flag'], quote['pair_type']
-            
+
             if importances is not None:
                 if quote['pair_type'] in importances:
                     print("TODO")
-                    ## pair_type = cst.PAIR_FILTERS[quote['pair_type']]
+                    # pair_type = cst.PAIR_FILTERS[quote['pair_type']]
                 else:
                     continue
 
@@ -251,10 +263,11 @@ def search_events(text, importances=None, countries=None, n_results=None):
             if n_results == 1: return search_event
 
             if search_event not in search_results: search_results.append(search_event)
-        
+
         params['offset'] += 270
 
-        if len(search_results) >= n_results or len(search_results) >= total_results or params['offset'] >= total_results:
+        if len(search_results) >= n_results or len(search_results) >= total_results or params[
+                'offset'] >= total_results:
             break
-    
+
     return search_results[:n_results]
