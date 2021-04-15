@@ -1,19 +1,10 @@
 import investpy
 
+# df = investpy.get_stock_historical_data(stock='AAPL',
+#                                         country='United States',
+#                                         from_date='01/01/2010',
+#                                         to_date='01/01/2020')
 
-def main():
-    # Old stuff
-    # data = investpy.get_stock_financial_summary(stock='GME', country='United States')
+tester = investpy.get_stock_historical_data(stock='AAPL', country='United States')
 
-    # Potential second presentable
-    # data = investpy.get_stock_financials(stock='GME', country='United States', financials_type='BAL', period='quarterly')
-    # print(data)
-
-    # First presentable
-    tester = investpy.get_stock_historical_data(stock='AAPL', country='United States')
-    print(tester)
-
-
-if __name__ == '__main__':
-    main()
-
+print(tester)
