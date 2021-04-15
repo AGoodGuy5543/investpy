@@ -1514,18 +1514,18 @@ def get_stock_financials(stock, country, finacials_type='INC', period='annual'):
 
     if not isinstance(country, str):
         raise ValueError("ERR#0025: specified country value not valid.")
-    # TODO: Change the summary_type to fit with financials_type
+
     # if summary_type is None:
-    # raise ValueError("ERR#0132: summary_type can not be None, it should be a str.")
+        # raise ValueError("ERR#0132: summary_type can not be None, it should be a str.")
 
     # if not isinstance(summary_type, str):
-    # raise ValueError("ERR#0133: summary_type value not valid.")
+        # raise ValueError("ERR#0133: summary_type value not valid.")
 
     # summary_type = unidecode(summary_type.strip().lower())
 
     # if summary_type not in cst.FINANCIAL_SUMMARY_TYPES.keys():
-    # raise ValueError("ERR#0134: introduced summary_type is not valid, since available values are: " + ', '.join(
-    # cst.FINANCIAL_SUMMARY_TYPES.keys()))
+        # raise ValueError("ERR#0134: introduced summary_type is not valid, since available values are: " + ', '.join(
+            # cst.FINANCIAL_SUMMARY_TYPES.keys()))
 
     if period is None:
         raise ValueError("ERR#0135: period can not be None, it should be a str.")
@@ -1558,16 +1558,16 @@ def get_stock_financials(stock, country, finacials_type='INC', period='annual'):
 
     stock = unidecode(stock.strip().lower())
 
-    if stock not in list(stocks['symbol'].str.lower()):
+    if stock not in list(stocks['symbol'].apply(unidecode).str.lower()):
         raise RuntimeError("ERR#0018: stock " + stock + " not found, check if it is correct.")
 
-    id_ = stocks.loc[(stocks['symbol'].str.lower() == stock).idxmax(), 'id']
+    id_ = stocks.loc[(stocks['symbol'].apply(unidecode).str.lower() == stock).idxmax(), 'id']
 
     headers = {
         "User-Agent": random_user_agent(),
         "X-Requested-With": "XMLHttpRequest",
         "Accept": "text/html",
-        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Encoding": "gzip, deflate",
         "Connection": "keep-alive",
     }
 
@@ -1588,13 +1588,15 @@ def get_stock_financials(stock, country, finacials_type='INC', period='annual'):
     root = fromstring(req.text)
     for element in root.xpath(".//tr"):
         print(element.text_content())
-    return ""
-    # data = {
-    #     'Date': list()
-    # }
-    table = tables
+    return 0
 
-    for element in table.xpath(".//thead").xpath(".//th"):
+    """data = {
+        'Date': list()
+    }
+
+    table = tables[cst.FINANCIAL_SUMMARY_TYPES[summary_type]]
+
+    for element in table.xpath(".//thead")[0].xpath(".//th"):
         if element.get('class') is None:
             data['Date'].append(datetime.strptime(element.text_content().strip(), '%b %d, %Y'))
 
@@ -1610,7 +1612,7 @@ def get_stock_financials(stock, country, finacials_type='INC', period='annual'):
     dataset = pd.DataFrame(data)
     dataset.set_index('Date', inplace=True)
 
-    return dataset
+    return dataset"""
 
 
 def search_stocks(by, value):
