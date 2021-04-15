@@ -154,7 +154,8 @@ def search_quotes(text, products=None, countries=None, n_results=None):
                                    country=country, tag=quote['link'],
                                    pair_type=pair_type, exchange=quote['exchange'])
 
-            if n_results == 1: return search_obj
+            # Solved search_quotes returns unconsistent type #339
+            #if n_results == 1: return search_obj
 
             if search_obj not in search_results: search_results.append(search_obj)
         
