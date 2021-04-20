@@ -31,8 +31,7 @@ def main():
                                               interval='Daily',
                                               from_date='01/01/1996',
                                               to_date='17/12/2020',
-                                              order='descending',
-                                              as_json=True)
+                                              order='descending')
 
     print(data.head())
 
