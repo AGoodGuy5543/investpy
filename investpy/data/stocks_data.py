@@ -69,7 +69,6 @@ def stocks_as_df(country=None):
 
         stocks = stocks[stocks['country'] == country]
         stocks.reset_index(drop=True, inplace=True)
-        stocks.drop_duplicates()
 
         return stocks
 
