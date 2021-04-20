@@ -52,8 +52,9 @@ def get_stocks(country=None):
         IOError: raised when `stocks.csv` file is missing or empty.
 
     """
-
-    return stocks_as_df(country)
+    data = pd.DataFrame(stocks_as_df(country))
+    drop_data = data.drop_duplicates()
+    return drop_data
 
 
 def get_stocks_list(country=None):
