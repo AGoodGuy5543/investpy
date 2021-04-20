@@ -18,8 +18,8 @@ def main():
     # print(tester)
 
     # SOLO ISSUE TESTS
-    # data = investpy.technical_indicators(name='bbva', country='spain', product_type='stock', interval='daily')
-    # print(data)
+    data = investpy.technical_indicators(name='bbva', country='spain', product_type='stock', interval='daily')
+    print(data)
     #
     # data = investpy.technical_indicators(name='aapl', country='united states', product_type='stock', interval='daily')
     # print(data)
@@ -47,7 +47,7 @@ def main():
     # print("(-----------------------------------------------------------------------)")
     # print(data_other)
 
-    print(investpy.get_stocks())
+    # print(investpy.get_stocks())
 
 
 if __name__ == '__main__':
