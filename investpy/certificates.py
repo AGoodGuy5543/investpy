@@ -264,12 +264,12 @@ def get_certificate_recent_data(certificate, country, as_json=False, order='asce
 
     certificate = unidecode(certificate.strip().lower())
 
-    if certificate not in list(certificates['name'].str.lower()):
+    if certificate not in list(certificates['name'].apply(unidecode).str.lower()):
         raise RuntimeError("ERR#0101: certificate " + certificate + " not found, check if it is correct.")
 
-    symbol = certificates.loc[(certificates['name'].str.lower() == certificate).idxmax(), 'symbol']
-    id_ = certificates.loc[(certificates['name'].str.lower() == certificate).idxmax(), 'id']
-    name = certificates.loc[(certificates['name'].str.lower() == certificate).idxmax(), 'name']
+    symbol = certificates.loc[(certificates['name'].apply(unidecode).str.lower() == certificate).idxmax(), 'symbol']
+    id_ = certificates.loc[(certificates['name'].apply(unidecode).str.lower() == certificate).idxmax(), 'id']
+    name = certificates.loc[(certificates['name'].apply(unidecode).str.lower() == certificate).idxmax(), 'name']
 
     header = symbol + ' Historical Data'
 
@@ -287,7 +287,7 @@ def get_certificate_recent_data(certificate, country, as_json=False, order='asce
         "User-Agent": random_user_agent(),
         "X-Requested-With": "XMLHttpRequest",
         "Accept": "text/html",
-        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Encoding": "gzip, deflate",
         "Connection": "keep-alive",
     }
 
@@ -510,12 +510,12 @@ def get_certificate_historical_data(certificate, country, from_date, to_date, as
 
     certificate = unidecode(certificate.strip().lower())
 
-    if certificate not in list(certificates['name'].str.lower()):
+    if certificate not in list(certificates['name'].apply(unidecode).str.lower()):
         raise RuntimeError("ERR#0101: certificate " + certificate + " not found, check if it is correct.")
 
-    symbol = certificates.loc[(certificates['name'].str.lower() == certificate).idxmax(), 'symbol']
-    id_ = certificates.loc[(certificates['name'].str.lower() == certificate).idxmax(), 'id']
-    name = certificates.loc[(certificates['name'].str.lower() == certificate).idxmax(), 'name']
+    symbol = certificates.loc[(certificates['name'].apply(unidecode).str.lower() == certificate).idxmax(), 'symbol']
+    id_ = certificates.loc[(certificates['name'].apply(unidecode).str.lower() == certificate).idxmax(), 'id']
+    name = certificates.loc[(certificates['name'].apply(unidecode).str.lower() == certificate).idxmax(), 'name']
 
     header = symbol + ' Historical Data'
 
@@ -540,7 +540,7 @@ def get_certificate_historical_data(certificate, country, from_date, to_date, as
             "User-Agent": random_user_agent(),
             "X-Requested-With": "XMLHttpRequest",
             "Accept": "text/html",
-            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Encoding": "gzip, deflate",
             "Connection": "keep-alive",
         }
 
@@ -690,11 +690,11 @@ def get_certificate_information(certificate, country, as_json=False):
 
     certificate = unidecode(certificate.strip().lower())
 
-    if certificate not in list(certificates['name'].str.lower()):
+    if certificate not in list(certificates['name'].apply(unidecode).str.lower()):
         raise RuntimeError("ERR#0101: certificate " + certificate + " not found, check if it is correct.")
 
-    tag = certificates.loc[(certificates['name'].str.lower() == certificate).idxmax(), 'tag']
-    name = certificates.loc[(certificates['name'].str.lower() == certificate).idxmax(), 'name']
+    tag = certificates.loc[(certificates['name'].apply(unidecode).str.lower() == certificate).idxmax(), 'tag']
+    name = certificates.loc[(certificates['name'].apply(unidecode).str.lower() == certificate).idxmax(), 'name']
 
     url = "https://www.investing.com/certificates/" + tag
 
@@ -702,7 +702,7 @@ def get_certificate_information(certificate, country, as_json=False):
         "User-Agent": random_user_agent(),
         "X-Requested-With": "XMLHttpRequest",
         "Accept": "text/html",
-        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Encoding": "gzip, deflate",
         "Connection": "keep-alive",
     }
 
@@ -838,7 +838,7 @@ def get_certificates_overview(country, as_json=False, n_results=100):
         "User-Agent": random_user_agent(),
         "X-Requested-With": "XMLHttpRequest",
         "Accept": "text/html",
-        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Encoding": "gzip, deflate",
         "Connection": "keep-alive",
     }
 

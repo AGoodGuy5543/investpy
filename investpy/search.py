@@ -108,7 +108,7 @@ def search_quotes(text, products=None, countries=None, n_results=None):
         "User-Agent": random_user_agent(),
         "X-Requested-With": "XMLHttpRequest",
         "Accept": "text/html",
-        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Encoding": "gzip, deflate",
         "Connection": "keep-alive",
     }
 
@@ -154,6 +154,8 @@ def search_quotes(text, products=None, countries=None, n_results=None):
                                    country=country, tag=quote['link'],
                                    pair_type=pair_type, exchange=quote['exchange'])
 
+            # Solved search_quotes returns unconsistent type #339
+            #if n_results == 1: return search_obj
             if n_results == 1: return search_obj
 
             if search_obj not in search_results: search_results.append(search_obj)
@@ -201,7 +203,7 @@ def search_events(text, importances=None, countries=None, n_results=None):
         "User-Agent": random_user_agent(),
         "X-Requested-With": "XMLHttpRequest",
         "Accept": "text/html",
-        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Encoding": "gzip, deflate",
         "Connection": "keep-alive",
     }
 
