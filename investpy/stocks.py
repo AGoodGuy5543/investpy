@@ -9,6 +9,7 @@ from random import randint
 import json
 import pandas as pd
 
+
 import pkg_resources
 
 import requests
@@ -52,6 +53,7 @@ def get_stocks(country=None):
         IOError: raised when `stocks.csv` file is missing or empty.
 
     """
+
     stocks_returned = stocks_as_df(country)
     stocks_refined = stocks_returned.drop_duplicates()
     pd.set_option('display.max_rows', None)
