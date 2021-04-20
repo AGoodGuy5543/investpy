@@ -255,11 +255,11 @@ def get_commodity_recent_data(commodity, country=None, as_json=False, order='asc
 
     commodity = unidecode(commodity.strip().lower())
 
-    if commodity not in list(commodities['name'].str.lower()):
+    if commodity not in list(commodities['name'].apply(unidecode).str.lower()):
         raise RuntimeError("ERR#0079: commodity " + commodity + " not found, check if it is correct.")
 
     if country is None:
-        found_commodities = commodities[commodities['name'].str.lower() == commodity]
+        found_commodities = commodities[commodities['name'].apply(unidecode).str.lower() == commodity]
         
         if len(found_commodities) > 1:
             msg = "Note that the displayed commodity data can differ depending on the country. " \
@@ -276,11 +276,11 @@ def get_commodity_recent_data(commodity, country=None, as_json=False, order='asc
 
         commodities = commodities[commodities['country'] == country]
 
-    full_name = commodities.loc[(commodities['name'].str.lower() == commodity).idxmax(), 'full_name']
-    id_ = commodities.loc[(commodities['name'].str.lower() == commodity).idxmax(), 'id']
-    name = commodities.loc[(commodities['name'].str.lower() == commodity).idxmax(), 'name']
+    full_name = commodities.loc[(commodities['name'].apply(unidecode).str.lower() == commodity).idxmax(), 'full_name']
+    id_ = commodities.loc[(commodities['name'].apply(unidecode).str.lower() == commodity).idxmax(), 'id']
+    name = commodities.loc[(commodities['name'].apply(unidecode).str.lower() == commodity).idxmax(), 'name']
 
-    currency = commodities.loc[(commodities['name'].str.lower() == commodity).idxmax(), 'currency']
+    currency = commodities.loc[(commodities['name'].apply(unidecode).str.lower() == commodity).idxmax(), 'currency']
 
     header = full_name + ' Historical Data'
 
@@ -298,7 +298,7 @@ def get_commodity_recent_data(commodity, country=None, as_json=False, order='asc
         "User-Agent": random_user_agent(),
         "X-Requested-With": "XMLHttpRequest",
         "Accept": "text/html",
-        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Encoding": "gzip, deflate",
         "Connection": "keep-alive",
     }
 
@@ -516,11 +516,11 @@ def get_commodity_historical_data(commodity, from_date, to_date, country=None, a
 
     commodity = unidecode(commodity.strip().lower())
 
-    if commodity not in list(commodities['name'].str.lower()):
+    if commodity not in list(commodities['name'].apply(unidecode).str.lower()):
         raise RuntimeError("ERR#0079: commodity " + commodity + " not found, check if it is correct.")
 
     if country is None:
-        found_commodities = commodities[commodities['name'].str.lower() == commodity]
+        found_commodities = commodities[commodities['name'].apply(unidecode).str.lower() == commodity]
         
         if len(found_commodities) > 1:
             msg = "Note that the displayed commodity data can differ depending on the country. " \
@@ -537,11 +537,11 @@ def get_commodity_historical_data(commodity, from_date, to_date, country=None, a
 
         commodities = commodities[commodities['country'] == country]
 
-    full_name = commodities.loc[(commodities['name'].str.lower() == commodity).idxmax(), 'full_name']
-    id_ = commodities.loc[(commodities['name'].str.lower() == commodity).idxmax(), 'id']
-    name = commodities.loc[(commodities['name'].str.lower() == commodity).idxmax(), 'name']
+    full_name = commodities.loc[(commodities['name'].apply(unidecode).str.lower() == commodity).idxmax(), 'full_name']
+    id_ = commodities.loc[(commodities['name'].apply(unidecode).str.lower() == commodity).idxmax(), 'id']
+    name = commodities.loc[(commodities['name'].apply(unidecode).str.lower() == commodity).idxmax(), 'name']
 
-    currency = commodities.loc[(commodities['name'].str.lower() == commodity).idxmax(), 'currency']
+    currency = commodities.loc[(commodities['name'].apply(unidecode).str.lower() == commodity).idxmax(), 'currency']
 
     header = full_name + ' Historical Data'
 
@@ -566,7 +566,7 @@ def get_commodity_historical_data(commodity, from_date, to_date, country=None, a
             "User-Agent": random_user_agent(),
             "X-Requested-With": "XMLHttpRequest",
             "Accept": "text/html",
-            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Encoding": "gzip, deflate",
             "Connection": "keep-alive",
         }
 
@@ -720,11 +720,11 @@ def get_commodity_information(commodity, country=None, as_json=False):
 
     commodity = unidecode(commodity.strip().lower())
 
-    if commodity not in list(commodities['name'].str.lower()):
+    if commodity not in list(commodities['name'].apply(unidecode).str.lower()):
         raise RuntimeError("ERR#0079: commodity " + commodity + " not found, check if it is correct.")
 
     if country is None:
-        found_commodities = commodities[commodities['name'].str.lower() == commodity]
+        found_commodities = commodities[commodities['name'].apply(unidecode).str.lower() == commodity]
         
         if len(found_commodities) > 1:
             msg = "Note that the displayed commodity information can differ depending on the country. " \
@@ -741,8 +741,8 @@ def get_commodity_information(commodity, country=None, as_json=False):
 
         commodities = commodities[commodities['country'] == country]
 
-    name = commodities.loc[(commodities['name'].str.lower() == commodity).idxmax(), 'name']
-    tag = commodities.loc[(commodities['name'].str.lower() == commodity).idxmax(), 'tag']
+    name = commodities.loc[(commodities['name'].apply(unidecode).str.lower() == commodity).idxmax(), 'name']
+    tag = commodities.loc[(commodities['name'].apply(unidecode).str.lower() == commodity).idxmax(), 'tag']
 
     url = "https://www.investing.com/commodities/" + tag
 
@@ -750,7 +750,7 @@ def get_commodity_information(commodity, country=None, as_json=False):
         "User-Agent": random_user_agent(),
         "X-Requested-With": "XMLHttpRequest",
         "Accept": "text/html",
-        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Encoding": "gzip, deflate",
         "Connection": "keep-alive",
     }
 
@@ -892,7 +892,7 @@ def get_commodities_overview(group, as_json=False, n_results=100):
         "User-Agent": random_user_agent(),
         "X-Requested-With": "XMLHttpRequest",
         "Accept": "text/html",
-        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Encoding": "gzip, deflate",
         "Connection": "keep-alive",
     }
 
