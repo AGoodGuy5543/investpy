@@ -1,24 +1,21 @@
 import investpy
-import pandas as pd
 
-# tester = investpy.get_stock_historical_data(stock='AAPL', country='United States')
 
-# tester = investpy.get_stock_financials(stock='AAPL', country='United States')
+def main():
 
-# Dennis's Problem got rid of if statement
-search_results = investpy.search_quotes(text='apple',
-                                       products=['stocks'],
-                                       countries=['united states'],
-                                       n_results=10)
-for search_result in search_results[:1]:
-    print(search_result)
-    search_result.retrieve_historical_data(from_date='01/01/2019', to_date='01/01/2020')
-    print(search_result.data.head())
+    # data = investpy.get_stock_financial_summary(stock='GME', country='United States')
+    # print(data.head())
+
+
+
 
     # data = investpy.get_stock_financials(stock='AAPL', country='United States')
     # print("Before")
     # print(data)
     # print("After")
+
+
+
 
     # tester = investpy.get_stock_historical_data(stock='AAPL', country='United States')
     # print(tester)
@@ -45,8 +42,3 @@ for search_result in search_results[:1]:
 
     # data = investpy.get_indices_list(country='United States')
     # print(data)
-
-
-
-if __name__ == '__main__':
-    main()
