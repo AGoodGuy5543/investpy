@@ -15,7 +15,6 @@ for search_result in search_results[:1]:
     search_result.retrieve_historical_data(from_date='01/01/2019', to_date='01/01/2020')
     print(search_result.data.head())
 
-
 # df1 = investpy.search_quotes('LU0486851024',products=["etfs"],countries=["germany"])
 # df2 = investpy.search_quotes('IE00BFNM3P36',products=["etfs"],countries=["germany"])
 # for result in df1[:1]:
