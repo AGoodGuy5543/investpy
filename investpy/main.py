@@ -46,6 +46,5 @@ for search_result in search_results[:1]:
     # print(data)
 
 
-
 if __name__ == '__main__':
     main()
