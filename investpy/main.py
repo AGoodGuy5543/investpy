@@ -1,30 +1,23 @@
 import investpy
+import pandas as pd
 
+# tester = investpy.get_stock_historical_data(stock='AAPL', country='United States')
 
-def main():
+# tester = investpy.get_stock_financials(stock='AAPL', country='United States')
 
-    # data = investpy.get_stock_financial_summary(stock='GME', country='United States')
-    # print(data.head())
+# Dennis's Problem got rid of if statement
+search_results = investpy.search_quotes(text='apple',
+                                       products=['stocks'],
+                                       countries=['united states'],
+                                       n_results=10)
+for search_result in search_results[:1]:
+    print(search_result)
+    search_result.retrieve_historical_data(from_date='01/01/2019', to_date='01/01/2020')
+    print(search_result.data.head())
 
-    # temppls = investpy.get_stocks("United States")
-    # print(temppls)
+# df1 = investpy.search_quotes('LU0486851024',products=["etfs"],countries=["germany"])
+# df2 = investpy.search_quotes('IE00BFNM3P36',products=["etfs"],countries=["germany"])
+# for result in df1[:1]:
+#     print(result)
 
-    data = investpy.get_stock_financials(stock='AAPL', country='United States')
-    # print("Before")
-    print(data)
-    # print("After")
-
-    # tester = investpy.get_stock_historical_data(stock='AAPL', country='United States')
-    # print(tester)
-
-    # data = investpy.technical_indicators(name='bbva', country='spain', product_type='stock', interval='daily')
-    # data = investpy.technical_indicators(name='aapl', country='united states', product_type='stock', interval='daily')
-    # data = investpy.technical_indicators(name='gme', country='united states', product_type='stock', interval='daily')
-    # data = investpy.technical_indicators(name='U.S. 10Y', country='united states', product_type='bond', interval='daily')
-    # data = investpy.technical_indicators(name='gme', country='united states', product_type='stock', interval='weekly')
-    # print(data)
-
-
-if __name__ == '__main__':
-    main()
-
+#print(investpy.get_stocks())

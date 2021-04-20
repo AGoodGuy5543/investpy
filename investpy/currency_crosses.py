@@ -278,12 +278,12 @@ def get_currency_cross_recent_data(currency_cross, as_json=False, order='ascendi
 
     currency_cross = unidecode(currency_cross.strip().lower())
 
-    if currency_cross not in list(currency_crosses['name'].str.lower()):
+    if currency_cross not in list(currency_crosses['name'].apply(unidecode).str.lower()):
         raise RuntimeError("ERR#0054: the introduced currency_cross " + str(currency_cross) + " does not exist.")
 
-    id_ = currency_crosses.loc[(currency_crosses['name'].str.lower() == currency_cross).idxmax(), 'id']
-    name = currency_crosses.loc[(currency_crosses['name'].str.lower() == currency_cross).idxmax(), 'name']
-    currency = currency_crosses.loc[(currency_crosses['name'].str.lower() == currency_cross).idxmax(), 'second']
+    id_ = currency_crosses.loc[(currency_crosses['name'].apply(unidecode).str.lower() == currency_cross).idxmax(), 'id']
+    name = currency_crosses.loc[(currency_crosses['name'].apply(unidecode).str.lower() == currency_cross).idxmax(), 'name']
+    currency = currency_crosses.loc[(currency_crosses['name'].apply(unidecode).str.lower() == currency_cross).idxmax(), 'second']
 
     header = name + ' Historical Data'
 
@@ -301,7 +301,7 @@ def get_currency_cross_recent_data(currency_cross, as_json=False, order='ascendi
         "User-Agent": random_user_agent(),
         "X-Requested-With": "XMLHttpRequest",
         "Accept": "text/html",
-        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Encoding": "gzip, deflate",
         "Connection": "keep-alive",
     }
 
@@ -508,12 +508,12 @@ def get_currency_cross_historical_data(currency_cross, from_date, to_date, as_js
 
     currency_cross = unidecode(currency_cross.strip().lower())
 
-    if currency_cross not in list(currency_crosses['name'].str.lower()):
+    if currency_cross not in list(currency_crosses['name'].apply(unidecode).str.lower()):
         raise RuntimeError("ERR#0054: the introduced currency_cross " + str(currency_cross) + " does not exist.")
 
-    id_ = currency_crosses.loc[(currency_crosses['name'].str.lower() == currency_cross).idxmax(), 'id']
-    name = currency_crosses.loc[(currency_crosses['name'].str.lower() == currency_cross).idxmax(), 'name']
-    currency = currency_crosses.loc[(currency_crosses['name'].str.lower() == currency_cross).idxmax(), 'second']
+    id_ = currency_crosses.loc[(currency_crosses['name'].apply(unidecode).str.lower() == currency_cross).idxmax(), 'id']
+    name = currency_crosses.loc[(currency_crosses['name'].apply(unidecode).str.lower() == currency_cross).idxmax(), 'name']
+    currency = currency_crosses.loc[(currency_crosses['name'].apply(unidecode).str.lower() == currency_cross).idxmax(), 'second']
 
     final = list()
 
@@ -538,7 +538,7 @@ def get_currency_cross_historical_data(currency_cross, from_date, to_date, as_js
             "User-Agent": random_user_agent(),
             "X-Requested-With": "XMLHttpRequest",
             "Accept": "text/html",
-            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Encoding": "gzip, deflate",
             "Connection": "keep-alive",
         }
 
@@ -675,11 +675,11 @@ def get_currency_cross_information(currency_cross, as_json=False):
 
     currency_cross = unidecode(currency_cross.strip().lower())
 
-    if currency_cross not in list(currency_crosses['name'].str.lower()):
+    if currency_cross not in list(currency_crosses['name'].apply(unidecode).str.lower()):
         raise RuntimeError("ERR#0054: the introduced currency_cross " + str(currency_cross) + " does not exist.")
 
-    name = currency_crosses.loc[(currency_crosses['name'].str.lower() == currency_cross).idxmax(), 'name']
-    tag = currency_crosses.loc[(currency_crosses['name'].str.lower() == currency_cross).idxmax(), 'tag']
+    name = currency_crosses.loc[(currency_crosses['name'].apply(unidecode).str.lower() == currency_cross).idxmax(), 'name']
+    tag = currency_crosses.loc[(currency_crosses['name'].apply(unidecode).str.lower() == currency_cross).idxmax(), 'tag']
 
     url = "https://www.investing.com/currencies/" + tag
 
@@ -687,7 +687,7 @@ def get_currency_cross_information(currency_cross, as_json=False):
         "User-Agent": random_user_agent(),
         "X-Requested-With": "XMLHttpRequest",
         "Accept": "text/html",
-        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Encoding": "gzip, deflate",
         "Connection": "keep-alive",
     }
 
@@ -814,7 +814,7 @@ def get_currency_crosses_overview(currency, as_json=False, n_results=100):
         "User-Agent": random_user_agent(),
         "X-Requested-With": "XMLHttpRequest",
         "Accept": "text/html",
-        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Encoding": "gzip, deflate",
         "Connection": "keep-alive",
     }
 
