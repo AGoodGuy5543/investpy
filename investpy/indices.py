@@ -344,7 +344,6 @@ def get_index_recent_data(index, country, as_json=False, order='ascending', inte
 
 
 def get_index_historical_data(index, country, from_date, to_date, as_json=False, order='ascending', interval='Daily'):
-
     if index == "Dow Jones US":
         index = "DJ US"
 
@@ -354,7 +353,6 @@ def get_index_historical_data(index, country, from_date, to_date, as_json=False,
     function will raise an error). The retrieved historical data are the OHLC values plus the Volume and the Currency in
     which those values are specified, from the introduced date range if valid. So on, the resulting data can it either be
     stored in a :obj:`pandas.DataFrame` or in a :obj:`json` file.
-
     Args:
         index (:obj:`str`): name of the index to retrieve recent historical data from.
         country (:obj:`str`): name of the country from where the index is.
@@ -364,22 +362,17 @@ def get_index_historical_data(index, country, from_date, to_date, as_json=False,
             optional argument to determine the format of the output data (:obj:`pandas.DataFrame` or :obj:`json`).
         interval (:obj:`str`, optional):
             value to define the historical data interval to retrieve, by default `Daily`, but it can also be `Weekly` or `Monthly`.
-
     Returns:
         :obj:`pandas.DataFrame` or :obj:`json`:
             The function returns either a :obj:`pandas.DataFrame` or a :obj:`json` file containing the retrieved
             historical data from the specified index via argument. The dataset contains the open, high, low, close and
             volume values for the selected index on market days, additionally the currency in which those values are
             specified is returned.
-
             The returned data is case we use default arguments will look like::
-
                 Date || Open | High | Low | Close | Volume | Currency
                 -----||------|------|-----|-------|--------|----------
                 xxxx || xxxx | xxxx | xxx | xxxxx | xxxxxx | xxxxxxxx
-
             but if we define `as_json=True`, then the output will be::
-
                 {
                     name: name,
                     historical: [
@@ -395,14 +388,12 @@ def get_index_historical_data(index, country, from_date, to_date, as_json=False,
                         ...
                     ]
                 }
-
     Raises:
         ValueError: raised if there was an argument error.
         IOError: raised if indices object/file was not found or unable to retrieve.
         RuntimeError: raised if the introduced index does not match any of the indexed ones.
         ConnectionError: raised if GET requests does not return 200 status code.
         IndexError: raised if index information was unavailable or not found.
-
     Examples:
         >>> data = investpy.get_index_historical_data(index='ibex 35', country='spain', from_date='01/01/2018', to_date='01/01/2019')
         >>> data.head()
@@ -413,9 +404,7 @@ def get_index_historical_data(index, country, from_date, to_date, as_json=False,
         2018-01-04  15105.5  15368.7  15103.7  15368.7  17070000      EUR
         2018-01-05  15353.9  15407.5  15348.6  15398.9  11180000      EUR
         2018-01-08  15437.1  15448.7  15344.0  15373.3  12890000      EUR
-
     """
-
 
     if not index:
         raise ValueError("ERR#0047: index param is mandatory and should be a str.")
@@ -452,15 +441,18 @@ def get_index_historical_data(index, country, from_date, to_date, as_json=False,
         raise ValueError("ERR#0003: order argument can just be ascending (asc) or descending (desc), str type.")
 
     if not interval:
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     if not isinstance(interval, str):
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     interval = interval.lower()
 
     if interval not in ['daily', 'weekly', 'monthly']:
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     date_interval = {
         'intervals': [],
@@ -562,7 +554,7 @@ def get_index_historical_data(index, country, from_date, to_date, as_json=False,
 
         root_ = fromstring(req.text)
         path_ = root_.xpath(".//table[@id='curr_table']/tbody/tr")
-        
+
         result = list()
 
         if path_:
@@ -576,13 +568,14 @@ def get_index_historical_data(index, country, from_date, to_date, as_json=False,
                     data_flag = True
 
                 info = []
-        
+
                 for nested_ in elements_.xpath(".//td"):
                     info.append(nested_.get('data-real-value'))
 
                 if data_flag is True:
-                    index_date = datetime.strptime(str(datetime.fromtimestamp(int(info[0]), tz=pytz.timezone('GMT')).date()), '%Y-%m-%d')
-                    
+                    index_date = datetime.strptime(
+                        str(datetime.fromtimestamp(int(info[0]), tz=pytz.timezone('GMT')).date()), '%Y-%m-%d')
+
                     index_close = float(info[1].replace(',', ''))
                     index_open = float(info[2].replace(',', ''))
                     index_high = float(info[3].replace(',', ''))
@@ -600,7 +593,7 @@ def get_index_historical_data(index, country, from_date, to_date, as_json=False,
 
                 if as_json is True:
                     json_list = [value.index_as_json() for value in result]
-                    
+
                     final.append(json_list)
                 elif as_json is False:
                     df = pd.DataFrame.from_records([value.index_to_dict() for value in result])
@@ -620,7 +613,7 @@ def get_index_historical_data(index, country, from_date, to_date, as_json=False,
         }
         return json.dumps(json_, sort_keys=False)
     elif as_json is False:
-        return pd.concat(final)
+        return pd.DataFrame(final)
 
 
 def get_index_information(index, country, as_json=False):

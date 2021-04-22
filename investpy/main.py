@@ -30,15 +30,19 @@ def main():
     # data = investpy.get_index_recent_data(index='ibex 35', country='spain')
     # group issue 2 print(investpy.get_stocks())
 
-    data = investpy.get_index_historical_data(index='Dow Jones US',
-                                              country='united states',
-                                              interval='Daily',
-                                              from_date='01/01/1996',
-                                              to_date='17/12/2020',
-                                              order='descending',
-                                              as_json=True)
+    # data = investpy.technical_indicators(name='bbva', country='spain', product_type='stock', interval='daily')
+    # print(data)
+    #data = investpy.get_index_historical_data(index='Dow Jones US',
+                                              #country='united states',
+                                              #interval='Daily',
+                                              #from_date='01/01/1996',
+                                              #to_date='17/12/2020',
+                                              #order='descending')
 
-    print(data.head())
-
+    #print(data)
     # data = investpy.get_indices_list(country='United States')
     # print(data)
+
+
+if __name__ == '__main__':
+    main()
