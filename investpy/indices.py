@@ -229,15 +229,18 @@ def get_index_recent_data(index, country, as_json=False, order='ascending', inte
         raise ValueError("ERR#0003: order argument can just be ascending (asc) or descending (desc), str type.")
 
     if not interval:
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     if not isinstance(interval, str):
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     interval = interval.lower()
 
     if interval not in ['daily', 'weekly', 'monthly']:
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     resource_package = 'investpy'
     resource_path = '/'.join(('resources', 'indices.csv'))
@@ -296,7 +299,7 @@ def get_index_recent_data(index, country, as_json=False, order='ascending', inte
 
     root_ = fromstring(req.text)
     path_ = root_.xpath(".//table[@id='curr_table']/tbody/tr")
-    
+
     result = list()
 
     if path_:
@@ -305,12 +308,13 @@ def get_index_recent_data(index, country, as_json=False, order='ascending', inte
                 raise IndexError("ERR#0046: index information unavailable or not found.")
 
             info = []
-        
+
             for nested_ in elements_.xpath(".//td"):
                 info.append(nested_.get('data-real-value'))
 
-            index_date = datetime.strptime(str(datetime.fromtimestamp(int(info[0]), tz=pytz.timezone('GMT')).date()), '%Y-%m-%d')
-            
+            index_date = datetime.strptime(str(datetime.fromtimestamp(int(info[0]), tz=pytz.timezone('GMT')).date()),
+                                           '%Y-%m-%d')
+
             index_close = float(info[1].replace(',', ''))
             index_open = float(info[2].replace(',', ''))
             index_high = float(info[3].replace(',', ''))
@@ -344,8 +348,25 @@ def get_index_recent_data(index, country, as_json=False, order='ascending', inte
 
 
 def get_index_historical_data(index, country, from_date, to_date, as_json=False, order='ascending', interval='Daily'):
-
-    if index == "Dow Jones US":
+    if index.lower() == "dow jones us":
+        index = "DJ US"
+    elif index.lower() == "dow jones u.s.":
+        index = "DJ US"
+    elif index.lower() == "dow_jones_us":
+        index = "DJ US"
+    elif index.lower() == "dow_jones_u.s.":
+        index = "DJ US"
+    elif index.lower() == "dowjonesus":
+        index = "DJ US"
+    elif index.lower() == "dowjonesu.s.":
+        index = "DJ US"
+    elif index.lower() == "dow jones united states":
+        index = "DJ US"
+    elif index.lower() == "dow_jones_united_states":
+        index = "DJ US"
+    elif index.lower() == "dj united states":
+        index = "DJ US"
+    elif index.lower() == "dj_united_states":
         index = "DJ US"
 
     """
@@ -416,7 +437,6 @@ def get_index_historical_data(index, country, from_date, to_date, as_json=False,
 
     """
 
-
     if not index:
         raise ValueError("ERR#0047: index param is mandatory and should be a str.")
 
@@ -452,15 +472,18 @@ def get_index_historical_data(index, country, from_date, to_date, as_json=False,
         raise ValueError("ERR#0003: order argument can just be ascending (asc) or descending (desc), str type.")
 
     if not interval:
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     if not isinstance(interval, str):
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     interval = interval.lower()
 
     if interval not in ['daily', 'weekly', 'monthly']:
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     date_interval = {
         'intervals': [],
@@ -562,7 +585,7 @@ def get_index_historical_data(index, country, from_date, to_date, as_json=False,
 
         root_ = fromstring(req.text)
         path_ = root_.xpath(".//table[@id='curr_table']/tbody/tr")
-        
+
         result = list()
 
         if path_:
@@ -576,13 +599,14 @@ def get_index_historical_data(index, country, from_date, to_date, as_json=False,
                     data_flag = True
 
                 info = []
-        
+
                 for nested_ in elements_.xpath(".//td"):
                     info.append(nested_.get('data-real-value'))
 
                 if data_flag is True:
-                    index_date = datetime.strptime(str(datetime.fromtimestamp(int(info[0]), tz=pytz.timezone('GMT')).date()), '%Y-%m-%d')
-                    
+                    index_date = datetime.strptime(
+                        str(datetime.fromtimestamp(int(info[0]), tz=pytz.timezone('GMT')).date()), '%Y-%m-%d')
+
                     index_close = float(info[1].replace(',', ''))
                     index_open = float(info[2].replace(',', ''))
                     index_high = float(info[3].replace(',', ''))
@@ -600,7 +624,7 @@ def get_index_historical_data(index, country, from_date, to_date, as_json=False,
 
                 if as_json is True:
                     json_list = [value.index_as_json() for value in result]
-                    
+
                     final.append(json_list)
                 elif as_json is False:
                     df = pd.DataFrame.from_records([value.index_to_dict() for value in result])
@@ -838,7 +862,7 @@ def get_indices_overview(country, as_json=False, n_results=100):
     indices = indices[indices['country'] == country]
 
     if country == 'united states':
-        country= 'usa'
+        country = 'usa'
     elif country == 'united kingdom':
         country = 'uk'
 
@@ -850,7 +874,8 @@ def get_indices_overview(country, as_json=False, n_results=100):
         "Connection": "keep-alive",
     }
 
-    url = "https://www.investing.com/indices/" + country.replace(' ', '-') + "-indices?&majorIndices=on&primarySectors=on&additionalIndices=on&otherIndices=on"
+    url = "https://www.investing.com/indices/" + country.replace(' ',
+                                                                 '-') + "-indices?&majorIndices=on&primarySectors=on&additionalIndices=on&otherIndices=on"
 
     req = requests.get(url, headers=head)
 
