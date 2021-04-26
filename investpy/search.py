@@ -173,7 +173,7 @@ def search_quotes(text, products=None, countries=None, n_results=None):
 
     return search_results[:n_results]
 
-
+# Work in progress
 def search_events(text, importances=None, countries=None, n_results=None):
     """
     TODO
@@ -226,7 +226,6 @@ def search_events(text, importances=None, countries=None, n_results=None):
             raise ConnectionError(f"ERR#0015: error {response.status_code}, try again later.")
 
         events = response.json()['ec_event']
-
 
         if len(events) == 0:
             raise RuntimeError("ERR#0093: no results found on Investing.com for the introduced text.")
