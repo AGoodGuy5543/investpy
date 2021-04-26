@@ -18,8 +18,8 @@ def main():
     # print(tester)
 
     # SOLO ISSUE TESTS
-    data = investpy.technical_indicators(name='bbva', country='spain', product_type='stock', interval='daily')
-    print(data)
+    # data = investpy.technical_indicators(name='bbva', country='spain', product_type='stock', interval='daily')
+    # print(data)
     #
     # data = investpy.technical_indicators(name='aapl', country='united states', product_type='stock', interval='daily')
     # print(data)
@@ -48,6 +48,9 @@ def main():
     # print(data_other)
 
     # print(investpy.get_stocks())
+
+    event = investpy.search_events(text="Japan M2 Money Stock YoY")
+    print(event)
 
 
 if __name__ == '__main__':
