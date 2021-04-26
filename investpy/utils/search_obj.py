@@ -189,7 +189,7 @@ class SearchObj(object):
             "User-Agent": random_user_agent(),
             "X-Requested-With": "XMLHttpRequest",
             "Accept": "text/html",
-            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Encoding": "gzip, deflate",
             "Connection": "keep-alive",
         }
 
@@ -259,7 +259,7 @@ class SearchObj(object):
             "User-Agent": random_user_agent(),
             "X-Requested-With": "XMLHttpRequest",
             "Accept": "text/html",
-            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Encoding": "gzip, deflate",
             "Connection": "keep-alive",
         }
 
@@ -280,7 +280,7 @@ class SearchObj(object):
             "User-Agent": random_user_agent(),
             "X-Requested-With": "XMLHttpRequest",
             "Accept": "text/html",
-            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Encoding": "gzip, deflate",
             "Connection": "keep-alive",
         }
 
@@ -367,4 +367,4 @@ class SearchObj(object):
 
     def _convert2df(self):
         self.data = pd.DataFrame(self.data)
-        self.data = self.data.set_index('Date', inplace=True)
+        self.data.set_index('Date', inplace=True)
