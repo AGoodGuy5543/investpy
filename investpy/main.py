@@ -17,7 +17,7 @@ def main():
 
     # Alex Issue 291
     data = investpy.get_stock_financials(stock='GME', country='United States', finacials_type='BAL')
-    print(data.columns)
+    print(data)
 
 
     # Brandon issue 254
