@@ -1477,7 +1477,7 @@ def get_stock_financial_summary(stock, country, summary_type='income_statement',
     return dataset
 
 
-def get_stock_financials(stock, country, finacials_type='INC', period='annual'):
+def get_stock_financials(stock, country, finacials_type='INC', period='annual', totals_only=False):
 
     if not stock:
         raise ValueError("ERR#0013: stock parameter is mandatory and must be a valid stock symbol.")
@@ -1560,19 +1560,35 @@ def get_stock_financials(stock, country, finacials_type='INC', period='annual'):
             data['Date'].append(
                 element.text_content()[:4] + "-" + element.text_content()[4:6] + "-" + element.text_content()[7:])
 
+    if totals_only & (finacials_type == 'BAL'):
+        elementnumber = 0
+        title = None
+        for element in root.xpath(".//tbody")[0].xpath(".//tr"):
+
+            if element.get('id') == "childTr":
+                continue
+            else:
+                for x in element:
+                    if elementnumber == 0:
+                        if (x.text_content() == "Total Current Assets") | (x.text_content() == "Total Current Liabilities"):
+                            data[x.text_content()] = list()
+                            title = x.text_content()
+                            elementnumber = (elementnumber + 1) % 5
+                    elif (title == "Total Current Assets") | (title == "Total Current Liabilities"):
+                        data[title].append(x.text_content())
+                        elementnumber = (elementnumber + 1) % 5
+                    #print(str(printnum) + " " + x.text_content())
+                    #print("---------------")
+
+        dataset = pd.DataFrame(data)
+        dataset.set_index('Date', inplace=True)
+        pd.set_option('display.max_columns', None)
+        return dataset
+
     printnum=0
     listname=None
     for element in root.xpath(".//tbody")[0].xpath(".//tr"):
-        if element.get('id') == "parentTr":
-            for x in element:
-                if printnum == 0:
-                    data[x.text_content()] = list()
-                    listname = x.text_content()
-                else:
-                    data[listname].append(x.text_content())
-
-                printnum= (printnum + 1) % 5
-        elif element.get('id') == "childTr":
+        if element.get('id') == "childTr":
             continue
         else:
             for x in element:

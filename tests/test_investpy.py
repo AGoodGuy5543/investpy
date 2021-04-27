@@ -1388,6 +1388,11 @@ def test_investpy_technical():
         #                       interval=param['interval'])
 
 
+def test_get_stock_financials():
+    data = investpy.get_stock_financials(stock='GME', country='United States', finacials_type='BAL')
+    len(data.columns)
+
+
 if __name__ == '__main__':
     test_investpy()
     test_investpy_stocks()
@@ -1402,3 +1407,5 @@ if __name__ == '__main__':
     test_investpy_search()
     test_investpy_news()
     test_investpy_technical()
+    test_get_stock_financials()
+
