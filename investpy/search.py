@@ -189,20 +189,26 @@ def search_events(text, importances=None, countries=None, n_results=None):
         raise ValueError('ERR#0074: text parameter is mandatory and it should be a valid str.')
 
     if importances and not isinstance(importances, list):
-        raise ValueError('ERR#0138: importances filtering parameter is optional, but if specified, it must be a list of str.')
+        raise ValueError(
+            'ERR#0138: importances filtering parameter is optional, but if specified, it must be a list of str.')
 
     if countries and not isinstance(countries, list):
-        raise ValueError('ERR#0128: countries filtering parameter is optional, but if specified, it must be a list of str.')
+        raise ValueError(
+            'ERR#0128: countries filtering parameter is optional, but if specified, it must be a list of str.')
 
     if n_results and not isinstance(n_results, int):
-        raise ValueError('ERR#0088: n_results parameter is optional, but if specified, it must be an integer equal or higher than 1.')
+        raise ValueError(
+            'ERR#0088: n_results parameter is optional, but if specified, it must be an integer equal or higher than 1.')
 
     if n_results is not None:
         if n_results < 1:
-            raise ValueError('ERR#0088: n_results parameter is optional, but if specified, it must be an integer equal or higher than 1.')
+            raise ValueError(
+                'ERR#0088: n_results parameter is optional, but if specified, it must be an integer equal or higher than 1.')
+
+    text_alt = text.replace(' ', '%20')
 
     params = {
-        'search_text': text,
+        'search_text': text_alt,
         'tab': 'ec_event',
         'limit': 270,
         'offset': 0
@@ -313,4 +319,3 @@ def search_events(text, importances=None, countries=None, n_results=None):
 #     response = requests.post(url, data=params, headers=headers)
 #     tester = fromstring(response.text)
 #     print(tester)
-#
