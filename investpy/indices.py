@@ -344,25 +344,12 @@ def get_index_recent_data(index, country, as_json=False, order='ascending', inte
 
 
 def get_index_historical_data(index, country, from_date, to_date, as_json=False, order='ascending', interval='Daily'):
-    if index.lower() == "dow jones us":
-        index = "DJ US"
-    elif index.lower() == "dow jones u.s.":
-        index = "DJ US"
-    elif index.lower() == "dow_jones_us":
-        index = "DJ US"
-    elif index.lower() == "dow_jones_u.s.":
-        index = "DJ US"
-    elif index.lower() == "dowjonesus":
-        index = "DJ US"
-    elif index.lower() == "dowjonesu.s.":
-        index = "DJ US"
-    elif index.lower() == "dow jones united states":
-        index = "DJ US"
-    elif index.lower() == "dow_jones_united_states":
-        index = "DJ US"
-    elif index.lower() == "dj united states":
-        index = "DJ US"
-    elif index.lower() == "dj_united_states":
+
+    if index.lower() == "dow jones us" or index.lower() == "dow_jones_us" or index.lower() == "dow jones u.s."\
+            or index.lower() == "dowjonesus"\
+            or index.lower() == "dowjonesu.s." or index.lower() == "dow jones united states"\
+            or index.lower() == "dow_jones_united_states" or index.lower() == "dj united states"\
+            or index.lower() == "dj_united_states":
         index = "DJ US"
 
     """
