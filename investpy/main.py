@@ -23,7 +23,7 @@ import pandas as pd
 #                                        products=['stocks'],
 #                                        countries=['united states'],
 #                                        n_results=10)
-event = investpy.search_events(text="Japan M2 Money Stock YoY")
-print(event)
+
+event = investpy.search_events(text="U.S. ISM Manufacturing Purchasing Managers Index (PMI)")
 
 #print(investpy.get_stocks())

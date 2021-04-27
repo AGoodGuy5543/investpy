@@ -1,5 +1,6 @@
 # Copyright 2018-2021 Alvaro Bartolome, alvarobartt @ GitHub
 # See LICENSE for details.
+import json
 
 import requests
 
@@ -8,6 +9,8 @@ from unidecode import unidecode
 from .utils import constant as cst
 from .utils.search_obj import SearchObj
 from .utils.extra import random_user_agent
+
+from lxml.html import fromstring
 
 
 def search_quotes(text, products=None, countries=None, n_results=None):
@@ -213,6 +216,9 @@ def search_events(text, importances=None, countries=None, n_results=None):
         "Connection": "keep-alive",
     }
 
+    # text_alt = text.replace(' ', '%20')
+    # text_alt = text_alt + "&tab=ec_event"
+    # url = "https://www.investing.com/search/?q=" + text + "&tab=ec_event"
     url = 'https://www.investing.com/search/service/SearchInnerPage'
 
     search_results = list()
@@ -225,45 +231,86 @@ def search_events(text, importances=None, countries=None, n_results=None):
         if response.status_code != 200:
             raise ConnectionError(f"ERR#0015: error {response.status_code}, try again later.")
 
-        events = response.json()['ec_event']
+        # resp_dict = json.load(response.text)
 
+        # print(json.dumps(response.text))
+        events = response.json()['ec_event']
 
         if len(events) == 0:
             raise RuntimeError("ERR#0093: no results found on Investing.com for the introduced text.")
 
-        if total_results is None:
-            total_results = events['total']['quotes']
+        print(text)
+        for returned in events:
+            if returned["searchable"] == text:
+                target_url = "https://www.investing.com" + returned["link"]
 
-        if n_results is None:
-            n_results = events['total']['quotes']
+        response_economic = requests.post(target_url, data=params, headers=headers)
 
-        for event in events:
-            country, pair_type = event['flag'], event['pair_type']
+        if response.status_code != 200:
+            raise ConnectionError(f"ERR#0015: error {response.status_code}, try again later.")
 
-            if importances is not None:
-                if event['pair_type'] in importances:
-                    print("TODO")
-                    # pair_type = cst.PAIR_FILTERS[quote['pair_type']]
-                else:
-                    continue
+        root = fromstring(response_economic.text)
 
-            if countries is not None:
-                if event['flag'] in countries:
-                    country = cst.FLAG_FILTERS[event['flag']]
-                else:
-                    continue
+        table = root.xpath(".//table[contains(@class, 'genTbl openTbl ecHistoryTbl')]/tbody/tr")
 
-            search_event = SearchObj(id_=event['pairId'], name=event['name'], symbol=event['symbol'],
-                                     country=country, tag=event['link'],
-                                     pair_type=pair_type, exchange=event['exchange'])
+        for row in table:
+            counter = 0
+            for value in row.xpath("td"):
+                print(value.text)
+                counter = counter + 1
+        break
 
-            if n_results == 1: return search_event
-
-            if search_event not in search_results: search_results.append(search_event)
-
-        params['offset'] += 270
-
-        if len(search_results) >= n_results or len(search_results) >= total_results or params['offset'] >= total_results:
-            break
-
-    return search_results[:n_results]
+# def search_events(text, importances=None, countries=None, n_results=None):
+#     """
+#     TODO
+#     """
+#
+#     if not text:
+#         raise ValueError('ERR#0074: text parameter is mandatory and it should be a valid str.')
+#
+#     if not isinstance(text, str):
+#         raise ValueError('ERR#0074: text parameter is mandatory and it should be a valid str.')
+#
+#     if importances and not isinstance(importances, list):
+#         raise ValueError('ERR#0138: importances filtering parameter is optional, but if specified, it must be a list of str.')
+#
+#     if countries and not isinstance(countries, list):
+#         raise ValueError('ERR#0128: countries filtering parameter is optional, but if specified, it must be a list of str.')
+#
+#     if n_results and not isinstance(n_results, int):
+#         raise ValueError('ERR#0088: n_results parameter is optional, but if specified, it must be an integer equal or higher than 1.')
+#
+#     if n_results is not None:
+#         if n_results < 1:
+#             raise ValueError('ERR#0088: n_results parameter is optional, but if specified, it must be an integer equal or higher than 1.')
+#
+#     params = {
+#         'search_text': text,
+#         'tab': 'ec_event',
+#         'limit': 270,
+#         'offset': 0
+#     }
+#
+#     headers = {
+#         "User-Agent": random_user_agent(),
+#         "X-Requested-With": "XMLHttpRequest",
+#         "Accept": "text/html",
+#         "Accept-Encoding": "gzip, deflate, br",
+#         "Connection": "keep-alive",
+#     }
+#
+#     print(text)
+#     text_alt = text.replace(' ', '%20')
+#     text_alt = text_alt + "&tab=ec_event"
+#     url = "https://www.investing.com/search/?q=" + text_alt
+#     print(url)
+#
+#     # search_results = list()
+#     #
+#     # total_results = None
+#
+#     # while True:
+#     response = requests.post(url, data=params, headers=headers)
+#     tester = fromstring(response.text)
+#     print(tester)
+#
