@@ -9,7 +9,6 @@ from random import randint
 import json
 import pandas as pd
 
-
 import pkg_resources
 
 import requests
@@ -236,15 +235,18 @@ def get_stock_recent_data(stock, country, as_json=False, order='ascending', inte
         raise ValueError("ERR#0003: order argument can just be ascending (asc) or descending (desc), str type.")
 
     if not interval:
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     if not isinstance(interval, str):
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     interval = interval.lower()
 
     if interval not in ['daily', 'weekly', 'monthly']:
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     resource_package = 'investpy'
     resource_path = '/'.join((('resources', 'stocks.csv')))
@@ -316,7 +318,8 @@ def get_stock_recent_data(stock, country, as_json=False, order='ascending', inte
             for nested_ in elements_.xpath(".//td"):
                 info.append(nested_.get('data-real-value'))
 
-            stock_date = datetime.strptime(str(datetime.fromtimestamp(int(info[0]), tz=pytz.timezone('GMT')).date()), '%Y-%m-%d')
+            stock_date = datetime.strptime(str(datetime.fromtimestamp(int(info[0]), tz=pytz.timezone('GMT')).date()),
+                                           '%Y-%m-%d')
 
             stock_close = float(info[1].replace(',', ''))
             stock_open = float(info[2].replace(',', ''))
@@ -351,7 +354,9 @@ def get_stock_recent_data(stock, country, as_json=False, order='ascending', inte
         raise RuntimeError("ERR#0004: data retrieval error while scraping.")
 
 
-def get_stock_historical_data(stock, country, from_date='31/12/1969', to_date=(str(datetime.now().day)+"/"+str(datetime.now().month)+"/"+str(datetime.now().year)), as_json=False, order='ascending', interval='Daily'):
+def get_stock_historical_data(stock, country, from_date='31/12/1969', to_date=(
+        str(datetime.now().day) + "/" + str(datetime.now().month) + "/" + str(datetime.now().year)), as_json=False,
+                              order='ascending', interval='Daily'):
     """
     This function retrieves historical data from the introduced stock from Investing.com. So on, the historical data
     of the introduced stock from the specified country in the specified date range will be retrieved and returned as
@@ -441,15 +446,18 @@ def get_stock_historical_data(stock, country, from_date='31/12/1969', to_date=(s
         raise ValueError("ERR#0003: order argument can just be ascending (asc) or descending (desc), str type.")
 
     if not interval:
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     if not isinstance(interval, str):
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     interval = interval.lower()
 
     if interval not in ['daily', 'weekly', 'monthly']:
-        raise ValueError("ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
+        raise ValueError(
+            "ERR#0073: interval value should be a str type and it can just be either 'Daily', 'Weekly' or 'Monthly'.")
 
     try:
         datetime.strptime(from_date, '%d/%m/%Y')
@@ -586,7 +594,8 @@ def get_stock_historical_data(stock, country, from_date='31/12/1969', to_date=(s
                     info.append(nested_.get('data-real-value'))
 
                 if data_flag is True:
-                    stock_date = datetime.strptime(str(datetime.fromtimestamp(int(info[0]), tz=pytz.timezone('GMT')).date()), '%Y-%m-%d')
+                    stock_date = datetime.strptime(
+                        str(datetime.fromtimestamp(int(info[0]), tz=pytz.timezone('GMT')).date()), '%Y-%m-%d')
 
                     stock_close = float(info[1].replace(',', ''))
                     stock_open = float(info[2].replace(',', ''))
@@ -704,7 +713,8 @@ def get_stock_company_profile(stock, country='spain', language='english'):
     language = unidecode(language.strip().lower())
 
     if language not in available_sources.keys():
-        raise ValueError("ERR#0014: the specified language is not valid, it can just be either spanish (es) or english (en).")
+        raise ValueError(
+            "ERR#0014: the specified language is not valid, it can just be either spanish (es) or english (en).")
 
     country = unidecode(country.strip().lower())
 
@@ -908,13 +918,15 @@ def get_stock_dividends(stock, country):
                 for element_ in elements_.xpath(".//td"):
                     if element_.get('class'):
                         if element_.get('class').__contains__('first'):
-                            dividend_date = datetime.strptime(str(datetime.fromtimestamp(int(element_.get('data-value'))).date()), '%Y-%m-%d')
+                            dividend_date = datetime.strptime(
+                                str(datetime.fromtimestamp(int(element_.get('data-value'))).date()), '%Y-%m-%d')
                             dividend_value = float(element_.getnext().text_content().replace(',', ''))
                         if element_.get('data-value') in type_values.keys():
                             dividend_type = type_values[element_.get('data-value')]
                             try:
                                 value = int(element_.getnext().get('data-value'))
-                                dividend_payment_date = datetime.strptime(str(datetime.fromtimestamp(value).date()), '%Y-%m-%d')
+                                dividend_payment_date = datetime.strptime(str(datetime.fromtimestamp(value).date()),
+                                                                          '%Y-%m-%d')
                             except:
                                 dividend_payment_date = None
                             next_element_ = element_.getnext()
@@ -972,13 +984,15 @@ def get_stock_dividends(stock, country):
                         for element_ in elements_.xpath(".//td"):
                             if element_.get('class'):
                                 if element_.get('class').__contains__('first'):
-                                    dividend_date = datetime.strptime(str(datetime.fromtimestamp(int(element_.get('data-value'))).date()), '%Y-%m-%d')
+                                    dividend_date = datetime.strptime(
+                                        str(datetime.fromtimestamp(int(element_.get('data-value'))).date()), '%Y-%m-%d')
                                     dividend_value = float(element_.getnext().text_content().replace(',', ''))
                                 if element_.get('data-value') in type_values.keys():
                                     dividend_type = type_values[element_.get('data-value')]
                                     try:
                                         value = int(element_.getnext().get('data-value'))
-                                        dividend_payment_date = datetime.strptime(str(datetime.fromtimestamp(value).date()), '%Y-%m-%d')
+                                        dividend_payment_date = datetime.strptime(
+                                            str(datetime.fromtimestamp(value).date()), '%Y-%m-%d')
                                     except:
                                         dividend_payment_date = None
                                     next_element_ = element_.getnext()
@@ -1372,7 +1386,8 @@ def get_stock_financial_summary(stock, country, summary_type='income_statement',
     summary_type = unidecode(summary_type.strip().lower())
 
     if summary_type not in cst.FINANCIAL_SUMMARY_TYPES.keys():
-        raise ValueError("ERR#0134: introduced summary_type is not valid, since available values are: " + ', '.join(cst.FINANCIAL_SUMMARY_TYPES.keys()))
+        raise ValueError("ERR#0134: introduced summary_type is not valid, since available values are: " + ', '.join(
+            cst.FINANCIAL_SUMMARY_TYPES.keys()))
 
     if period is None:
         raise ValueError("ERR#0135: period can not be None, it should be a str.")
@@ -1383,7 +1398,8 @@ def get_stock_financial_summary(stock, country, summary_type='income_statement',
     period = unidecode(period.strip().lower())
 
     if period not in cst.FINANCIAL_SUMMARY_PERIODS.keys():
-        raise ValueError("ERR#0137: introduced period is not valid, since available values are: " + ', '.join(cst.FINANCIAL_SUMMARY_PERIODS.keys()))
+        raise ValueError("ERR#0137: introduced period is not valid, since available values are: " + ', '.join(
+            cst.FINANCIAL_SUMMARY_PERIODS.keys()))
 
     resource_package = 'investpy'
     resource_path = '/'.join((('resources', 'stocks.csv')))
@@ -1462,50 +1478,6 @@ def get_stock_financial_summary(stock, country, summary_type='income_statement',
 
 
 def get_stock_financials(stock, country, finacials_type='INC', period='annual'):
-    """
-    This function retrieves the financial summary of the introduced stock (by symbol) from the introduced
-    country, based on the summary_type value this function returns a different type of financial summary, so
-    that the output format of this function depends on its type. Additionally, the period of the retrieved
-    financial summary type can be specified.
-
-    Args:
-        stock (:obj:`str`): symbol of the stock to retrieve its financial summary.
-        country (:obj:`str`): name of the country from where the introduced stock symbol is.
-        summary_type (:obj:`str`, optional):
-            type of the financial summary table to retrieve, default value is `income_statement`, but all the
-            available types are: `income_statement`, `cash_flow_statement` and `balance_sheet`.
-        period (:obj:`str`, optional):
-            period range of the financial summary table to rertieve, detault value is `annual`, but all the
-            available periods are: `annual` and `quarterly`.
-
-    Returns:
-        :obj:`pandas.DataFrame` - financial_summary:
-            The resulting :obj:`pandas.DataFrame` contains the table of the requested financial summary from the
-            introduced stock, so the fields/column names may vary, since it depends on the summary_type introduced.
-            So on, the returned table will have the following format/structure::
-
-                Date || Field 1 | Field 2 | ... | Field N
-                -----||---------|---------|-----|---------
-                xxxx || xxxxxxx | xxxxxxx | xxx | xxxxxxx
-
-    Raises:
-        ValueError: raised if any of the introduced parameters is not valid or errored.
-        FileNotFoundError: raised if the stocks.csv file was not found.
-        IOError: raised if the stocks.csv file could not be read.
-        ConnectionError: raised if the connection to Investing.com errored or could not be established.
-        RuntimeError: raised if any error occurred while running the function.
-
-    Examples:
-        >>> data = investpy.get_stock_financials(stock='AAPL', country='United States', summary_type='income_statement', period='annual')
-        >>> data.head()
-                    Total Revenue  Gross Profit  Operating Income  Net Income
-        Date
-        2019-09-28         260174         98392             63930       55256
-        2018-09-29         265595        101839             70898       59531
-        2017-09-30         229234         88186             61344       48351
-        2016-09-24         215639         84263             60024       45687
-
-    """
 
     if not stock:
         raise ValueError("ERR#0013: stock parameter is mandatory and must be a valid stock symbol.")
@@ -1518,18 +1490,6 @@ def get_stock_financials(stock, country, finacials_type='INC', period='annual'):
 
     if not isinstance(country, str):
         raise ValueError("ERR#0025: specified country value not valid.")
-
-    # if summary_type is None:
-        # raise ValueError("ERR#0132: summary_type can not be None, it should be a str.")
-
-    # if not isinstance(summary_type, str):
-        # raise ValueError("ERR#0133: summary_type value not valid.")
-
-    # summary_type = unidecode(summary_type.strip().lower())
-
-    # if summary_type not in cst.FINANCIAL_SUMMARY_TYPES.keys():
-        # raise ValueError("ERR#0134: introduced summary_type is not valid, since available values are: " + ', '.join(
-            # cst.FINANCIAL_SUMMARY_TYPES.keys()))
 
     if period is None:
         raise ValueError("ERR#0135: period can not be None, it should be a str.")
@@ -1590,33 +1550,44 @@ def get_stock_financials(stock, country, finacials_type='INC', period='annual'):
         raise ConnectionError("ERR#0015: error " + str(req.status_code) + ", try again later.")
 
     root = fromstring(req.text)
-    for element in root.xpath(".//tr"):
-        print(element.text_content())
-    return ''
 
-    """data = {
+    data = {
         'Date': list()
     }
 
-    table = tables[cst.FINANCIAL_SUMMARY_TYPES[summary_type]]
+    for element in root.xpath(".//tr")[0].xpath(".//th"):
+        if element.text_content() != "Period Ending:":
+            data['Date'].append(
+                element.text_content()[:4] + "-" + element.text_content()[4:6] + "-" + element.text_content()[7:])
 
-    for element in table.xpath(".//thead")[0].xpath(".//th"):
-        if element.get('class') is None:
-            data['Date'].append(datetime.strptime(element.text_content().strip(), '%b %d, %Y'))
+    printnum=0
+    listname=None
+    for element in root.xpath(".//tbody")[0].xpath(".//tr"):
+        if element.get('id') == "parentTr":
+            for x in element:
+                if printnum == 0:
+                    data[x.text_content()] = list()
+                    listname = x.text_content()
+                else:
+                    data[listname].append(x.text_content())
 
-    for element in table.xpath(".//tbody")[0].xpath(".//tr"):
-        curr_row = None
-        for row in element.xpath(".//td"):
-            if row.get('class') is not None:
-                curr_row = row.text_content().strip()
-                data[curr_row] = list()
-                continue
-            data[curr_row].append(float(row.text_content().strip()))
+                printnum= (printnum + 1) % 5
+        elif element.get('id') == "childTr":
+            continue
+        else:
+            for x in element:
+                if printnum == 0:
+                    data[x.text_content()] = list()
+                    listname = x.text_content()
+                else:
+                    data[listname].append(x.text_content())
+
+                printnum = (printnum + 1) % 5
 
     dataset = pd.DataFrame(data)
     dataset.set_index('Date', inplace=True)
-
-    return dataset"""
+    pd.set_option('display.max_columns', None)
+    return dataset
 
 
 def search_stocks(by, value):
