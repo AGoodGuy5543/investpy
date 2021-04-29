@@ -1404,7 +1404,6 @@ def test_investpy_technical():
         assert str(type(issue284['Value'][15])) == "<class 'str'>"
 
 
-
 def test_get_stock_financials():
     issue229 = investpy.get_stock_financials(stock='GME', country='United States', finacials_type='BAL')
     assert len(issue229.columns) == 47
@@ -1439,4 +1438,3 @@ if __name__ == '__main__':
     test_investpy_news()
     test_investpy_technical()
     test_get_stock_financials()
-
