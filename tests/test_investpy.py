@@ -1405,6 +1405,25 @@ def test_investpy_technical():
 
 
 
+def test_get_stock_financials():
+    issue229 = investpy.get_stock_financials(stock='GME', country='United States', finacials_type='BAL')
+    assert len(issue229.columns) == 47
+    index = issue229.index
+    assert len(index) == 4
+    assert issue229.columns[0] == 'Total Current Assets'
+    assert issue229.columns[1] == 'Cash and Short Term Investments'
+    assert issue229.columns[2] == 'Cash'
+    assert issue229.columns[45] == 'Total Common Shares Outstanding'
+    assert issue229.columns[46] == 'Total Preferred Shares Outstanding'
+
+    issue300 = investpy.get_stock_financials(stock='GME', country='United States', finacials_type='BAL', totals_only=True)
+    assert len(issue300.columns) == 2
+    index300 = issue300.index
+    assert len(index300) == 4
+    assert issue300.columns[0] == 'Total Current Assets'
+    assert issue300.columns[1] == 'Total Current Liabilities'
+
+
 if __name__ == '__main__':
     # test_investpy()
     # test_investpy_stocks()
@@ -1419,3 +1438,5 @@ if __name__ == '__main__':
     # test_investpy_search()
     # test_investpy_news()
     test_investpy_technical()
+    test_get_stock_financials()
+

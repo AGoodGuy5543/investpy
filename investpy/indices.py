@@ -344,6 +344,27 @@ def get_index_recent_data(index, country, as_json=False, order='ascending', inte
 
 
 def get_index_historical_data(index, country, from_date, to_date, as_json=False, order='ascending', interval='Daily'):
+    if index.lower() == "dow jones us":
+        index = "DJ US"
+    elif index.lower() == "dow jones u.s.":
+        index = "DJ US"
+    elif index.lower() == "dow_jones_us":
+        index = "DJ US"
+    elif index.lower() == "dow_jones_u.s.":
+        index = "DJ US"
+    elif index.lower() == "dowjonesus":
+        index = "DJ US"
+    elif index.lower() == "dowjonesu.s.":
+        index = "DJ US"
+    elif index.lower() == "dow jones united states":
+        index = "DJ US"
+    elif index.lower() == "dow_jones_united_states":
+        index = "DJ US"
+    elif index.lower() == "dj united states":
+        index = "DJ US"
+    elif index.lower() == "dj_united_states":
+        index = "DJ US"
+
     """
     This function retrieves historical data of the introduced `index` (from the specified country, note that both
     index and country should match since if the introduced index is not listed in the indices of that country, the
@@ -411,6 +432,7 @@ def get_index_historical_data(index, country, from_date, to_date, as_json=False,
         2018-01-08  15437.1  15448.7  15344.0  15373.3  12890000      EUR
 
     """
+
 
     if not index:
         raise ValueError("ERR#0047: index param is mandatory and should be a str.")
@@ -509,7 +531,7 @@ def get_index_historical_data(index, country, from_date, to_date, as_json=False,
 
     index = unidecode(index.strip().lower())
 
-    if index not in list(indices['name'].apply(unidecode).str.lower()):
+    if index not in list(indices['name'].str.lower()):
         raise RuntimeError("ERR#0045: index " + index + " not found, check if it is correct.")
 
     full_name = indices.loc[(indices['name'].apply(unidecode).str.lower() == index).idxmax(), 'full_name']
