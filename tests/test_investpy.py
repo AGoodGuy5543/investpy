@@ -1,8 +1,6 @@
 # Copyright 2018-2021 Alvaro Bartolome, alvarobartt @ GitHub
 # See LICENSE for details.
 
-import pytest
-
 import investpy
 
 
@@ -1377,15 +1375,15 @@ def test_investpy_technical():
                                       product_type=param['product_type'],
                                       interval=param['interval'])
 
-        # investpy.moving_averages(name=param['name'],
-        #                          country=param['country'],
-        #                          product_type=param['product_type'],
-        #                          interval=param['interval'])
-        #
-        # investpy.pivot_points(name=param['name'],
-        #                       country=param['country'],
-        #                       product_type=param['product_type'],
-        #                       interval=param['interval'])
+        investpy.moving_averages(name=param['name'],
+                                 country=param['country'],
+                                 product_type=param['product_type'],
+                                 interval=param['interval'])
+
+        investpy.pivot_points(name=param['name'],
+                              country=param['country'],
+                              product_type=param['product_type'],
+                              interval=param['interval'])
 
         issue284 = investpy.technical_indicators(name='bbva', country='spain', product_type='stock', interval='daily')
         assert len(issue284.columns) == 5
@@ -1402,7 +1400,6 @@ def test_investpy_technical():
 
         assert str(type(issue284['Value'][14])) == "<class 'str'>"
         assert str(type(issue284['Value'][15])) == "<class 'str'>"
-
 
 
 def test_get_stock_financials():
@@ -1425,18 +1422,17 @@ def test_get_stock_financials():
 
 
 if __name__ == '__main__':
-    # test_investpy()
-    # test_investpy_stocks()
-    # test_investpy_funds()
-    # test_investpy_etfs()
-    # test_investpy_indices()
-    # test_investpy_currency_crosses()
-    # test_investpy_bonds()
-    # test_investpy_commodities()
-    # test_investpy_cryptos()
-    # test_investpy_certificates()
-    # test_investpy_search()
-    # test_investpy_news()
+    test_investpy()
+    test_investpy_stocks()
+    test_investpy_funds()
+    test_investpy_etfs()
+    test_investpy_indices()
+    test_investpy_currency_crosses()
+    test_investpy_bonds()
+    test_investpy_commodities()
+    test_investpy_cryptos()
+    test_investpy_certificates()
+    test_investpy_search()
+    test_investpy_news()
     test_investpy_technical()
     test_get_stock_financials()
-
