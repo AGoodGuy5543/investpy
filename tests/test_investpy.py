@@ -1,8 +1,6 @@
 # Copyright 2018-2021 Alvaro Bartolome, alvarobartt @ GitHub
 # See LICENSE for details.
 
-import pytest
-
 import investpy
 
 
@@ -1377,15 +1375,31 @@ def test_investpy_technical():
                                       product_type=param['product_type'],
                                       interval=param['interval'])
 
-        # investpy.moving_averages(name=param['name'],
-        #                          country=param['country'],
-        #                          product_type=param['product_type'],
-        #                          interval=param['interval'])
-        #
-        # investpy.pivot_points(name=param['name'],
-        #                       country=param['country'],
-        #                       product_type=param['product_type'],
-        #                       interval=param['interval'])
+        investpy.moving_averages(name=param['name'],
+                                 country=param['country'],
+                                 product_type=param['product_type'],
+                                 interval=param['interval'])
+
+        investpy.pivot_points(name=param['name'],
+                              country=param['country'],
+                              product_type=param['product_type'],
+                              interval=param['interval'])
+
+        issue284 = investpy.technical_indicators(name='bbva', country='spain', product_type='stock', interval='daily')
+        assert len(issue284.columns) == 5
+
+        index284 = issue284.index
+        assert len(index284) == 16
+
+        assert issue284.columns[0] == 'Name'
+        assert issue284.columns[2] == 'Value'
+        assert issue284.columns[4] == 'Action'
+
+        assert issue284['Name'][14] == 'Price'
+        assert issue284['Name'][15] == 'DateTimeStamp'
+
+        assert str(type(issue284['Value'][14])) == "<class 'str'>"
+        assert str(type(issue284['Value'][15])) == "<class 'str'>"
 
 
 def test_get_stock_financials():
@@ -1442,4 +1456,3 @@ if __name__ == '__main__':
     test_investpy_news()
     test_investpy_technical()
     test_get_stock_financials()
-
