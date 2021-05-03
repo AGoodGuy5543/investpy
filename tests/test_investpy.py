@@ -1407,6 +1407,26 @@ def test_get_stock_financials():
     assert issue300.columns[1] == 'Total Current Liabilities'
 
 
+def test_get_index_historical_data_dow_jones():
+    issue254 = investpy.get_index_historical_data(index='Dow Jones US',
+                                               country='united states',
+                                               interval='Daily',
+                                               from_date='01/01/1996',
+                                               to_date='17/12/2020',
+                                               order='descending')
+
+    assert issue254.columns[0] == 'Open'
+    assert len(issue254) == 2669
+    issue254a = investpy.get_index_historical_data(index='dOw JoNeS UniTed StATEs',
+                                                  country='united states',
+                                                  interval='Daily',
+                                                  from_date='01/01/1996',
+                                                  to_date='17/12/2020',
+                                                  order='descending')
+    assert issue254a.columns[0] == 'Open'
+    assert len(issue254a) == 2669
+
+
 if __name__ == '__main__':
     test_investpy()
     test_investpy_stocks()
