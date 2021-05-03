@@ -16,19 +16,19 @@ def main():
     # print(data)
 
     # Alex Issue 291
-    data = investpy.get_stock_financials(stock='GME', country='United States', finacials_type='BAL')
-    print(data)
+    # data = investpy.get_stock_financials(stock='GME', country='United States', finacials_type='BAL')
+    # print(data)
 
 
-    # Brandon issue 254
-    # data = investpy.get_index_historical_data(index='Dow Jones US',
-    #                                           country='united states',
-    #                                           interval='Daily',
-    #                                           from_date='01/01/1996',
-    #                                           to_date='17/12/2020',
-    #                                           order='descending')
-    #
-    # print(data.head())
+     # Brandon issue 254
+     data = investpy.get_index_historical_data(index='Dow Jones US',
+                                               country='united states',
+                                               interval='Daily',
+                                               from_date='01/01/1996',
+                                               to_date='17/12/2020',
+                                               order='descending')
+
+     print(data.head())
 
     #Dennis Issue 339
     # df1 = investpy.search_quotes('LU0486851024', products=["etfs"], countries=["germany"])

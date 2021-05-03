@@ -345,7 +345,8 @@ def get_index_recent_data(index, country, as_json=False, order='ascending', inte
 
 def get_index_historical_data(index, country, from_date, to_date, as_json=False, order='ascending', interval='Daily'):
 
-    if index.lower() == "dow jones us" or index.lower() == "dow_jones_us" or index.lower() == "dow jones u.s."\
+    if index.lower() == "dow jones us" or index.lower() == "dow_jones_us" or index.lower() == "dow_jones_u.s." \
+            or index.lower() == "dow jones u.s."\
             or index.lower() == "dowjonesus"\
             or index.lower() == "dowjonesu.s." or index.lower() == "dow jones united states"\
             or index.lower() == "dow_jones_united_states" or index.lower() == "dj united states"\
