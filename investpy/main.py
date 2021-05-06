@@ -8,17 +8,16 @@ def main():
     # print(tester)
 
     # Group issue #2 issue 203
-    # data = investpy.get_indices_list(country='United States')
-    # print(data)
+    data = investpy.get_stocks(country='India')
+    print(data)
 
     # Group issue #3 Issue 300
     # data = investpy.get_stock_financials(stock='GME', country='United States', finacials_type='BAL', totals_only=True)
     # print(data)
 
     # Alex Issue 291
-    data = investpy.get_stock_financials(stock='GME', country='United States', finacials_type='BAL')
-    print(data)
-
+    # data = investpy.get_stock_financials(stock='GME', country='United States', finacials_type='BAL')
+    # print(data)
 
     # Brandon issue 254
     # data = investpy.get_index_historical_data(index='Dow Jones US',
